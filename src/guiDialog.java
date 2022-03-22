@@ -8,6 +8,8 @@ public class guiDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+
+    private ButtonGroup buttonGroupRace;
     private JRadioButton radioButton1;
     private JRadioButton radioButton2;
     private JRadioButton radioButton3;
@@ -17,7 +19,7 @@ public class guiDialog extends JDialog {
     private JRadioButton radioButton7;
     private JRadioButton radioButton8;
     private JRadioButton radioButton9;
-    private ButtonGroup buttonGroupRace;
+    private JTextPane textPaneRace;
 
     public guiDialog() {
         setContentPane(contentPane);
@@ -64,13 +66,19 @@ public class guiDialog extends JDialog {
         dispose();
     }
 
-    private void fillInfo(ArrayList<String> races) {
-        Enumeration<AbstractButton> buttons = buttonGroupRace.getElements();//Makes Enum type from race buttons group
-        int i = 0;
-        while(buttons.hasMoreElements()) {//For each button in enumerator
-            buttons.nextElement().setText(races.get(i));//Set text value to current race in ArrayList
-            //System.out.println(races.get(i));
-            i++;//Next race in ArrayList
+    private void fillInfo(ArrayList<PCRace> races) {
+        ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupRace.getElements());//get all buttons, convert from enum to array
+        for(int i = 0; i < buttons.size(); i++) {//For each button in array
+            buttons.get(i).setText((races.get(i).name));//Set text = name
+
+            int finalI = i;
+            buttons.get(i).addActionListener(new ActionListener() {//Add listener to button
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textPaneRace.setText(races.get(finalI).printRace());
+                }
+            });
+
         }
     }
 
@@ -81,16 +89,18 @@ public class guiDialog extends JDialog {
             Scanner reader = new Scanner(dataSource);
 
             //Make a list of all Races
-            ArrayList<String> races = new ArrayList<String>();
+            ArrayList<PCRace> races = new ArrayList<PCRace>();
             while (reader.hasNextLine()) {//Fill in the Race list from Race file
-                races.add(reader.nextLine());
+                String line = reader.nextLine();
+                PCRace temp = new PCRace(line);
+                races.add(temp);
             }
             reader.close();
 
             fillInfo(races);//Assigns races to buttons
 
         } catch (FileNotFoundException e) {//Catches if Races.txt cannot be found
-            System.out.println("An error occurred.");
+            System.out.println("Races.txt was not found");
             e.printStackTrace();
         }
     }

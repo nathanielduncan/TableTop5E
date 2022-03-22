@@ -1,9 +1,9 @@
-Dwarf
-Elf
-Halfling
-Human
-Dragonborn
-Gnome
-Half-Elf
-Half-Orc
-Tiefling
+Dwarf Con:2
+Elf Dex:2
+Halfling Dex:2
+Human Str:1,Dex:1,Con:1,Int:1,Wis:1,Cha:1
+Dragonborn Str:2,Cha:1
+Gnome Int:2
+Half-Elf Cha:2,Opt:1,Opt:1
+Half-Orc Str:2,Con:1
+Tiefling Int:1,Cha:2
