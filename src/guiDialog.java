@@ -19,14 +19,20 @@ public class guiDialog extends JDialog {
     private JRadioButton radioButton7;
     private JRadioButton radioButton8;
     private JRadioButton radioButton9;
-    private JTextPane textPaneRace;
+    private JLabel labelRaceName;
+    private JLabel labelASI;
+    private JLabel labelAge;
+    private JLabel labelSize;
+    private JLabel labelSpeed;
+    private JLabel labelLanguages;
+    private JLabel labelSubraces;
 
     public guiDialog() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        getInfo();
+        getRaceInfo();
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -66,23 +72,37 @@ public class guiDialog extends JDialog {
         dispose();
     }
 
-    private void fillInfo(ArrayList<PCRace> races) {
+    private void fillRaceInfo(ArrayList<PCRace> races) {
         ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupRace.getElements());//get all buttons, convert from enum to array
         for(int i = 0; i < buttons.size(); i++) {//For each button in array
             buttons.get(i).setText((races.get(i).name));//Set text = name
 
             int finalI = i;
+            int width = 250;//For wrapping the description tests
+            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";
             buttons.get(i).addActionListener(new ActionListener() {//Add listener to button
                 @Override
-                public void actionPerformed(ActionEvent e) {
-                    textPaneRace.setText(races.get(finalI).printRace());
+                public void actionPerformed(ActionEvent e) {//On button click, fill all lables with that races info
+                    labelRaceName.setText(races.get(finalI).name);
+                    labelASI.setText(
+                            "Ability Score Increases: " + races.get(finalI).printASI());
+                    labelAge.setText(String.format(format, width,
+                            "Age: " + races.get(finalI).age));
+                    labelSize.setText(String.format(format, width,
+                            "Size: " + races.get(finalI).sizeDesc));
+                    labelSpeed.setText(
+                            "Speed: " + races.get(finalI).speed.toString());//Stored as int, writes as string
+                    labelLanguages.setText(
+                            "Languages: " + races.get(finalI).languages);
+                    labelSubraces.setText(
+                            "Subrace options: " + races.get(finalI).subrace);
                 }
             });
 
         }
     }
 
-    private void getInfo() {
+    private void getRaceInfo() {
         try {
             //Open file reader for Races
             File dataSource = new File("src\\Data\\Races.txt");
@@ -97,7 +117,7 @@ public class guiDialog extends JDialog {
             }
             reader.close();
 
-            fillInfo(races);//Assigns races to buttons
+            fillRaceInfo(races);//Assigns races to buttons
 
         } catch (FileNotFoundException e) {//Catches if Races.txt cannot be found
             System.out.println("Races.txt was not found");

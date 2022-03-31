@@ -3,14 +3,19 @@ import java.util.ArrayList;
 public class PCRace {
     String name;
     ArrayList<ASI> asi = new ArrayList<ASI>();
-    Integer age;
-    Integer size;
+    String age;
+    String sizeDesc;
     Integer speed;
     String languages;
     String  subrace;
 
+    enum Size {
+        Tiny, Small, Medium, Large, Huge, Gargantuan, Unset;
+    }
+    Size size = Size.Unset;
+
     public PCRace(String line) {//Constructor
-        ArrayList<String> tokens = doWork.getTokens(line, " ");//Gets all tokens for the Race
+        ArrayList<String> tokens = doWork.getTokens(line, ";");//Gets all tokens for the Race
         name = tokens.get(0);//First token is name
 
         //Second token is for all ASI
@@ -20,11 +25,11 @@ public class PCRace {
             asi.add(new ASI(pair.get(0), pair.get(1)));                     //Add ACI to class
         }
 
-        age = 0;
-        size = 0;
-        speed = 0;
-        languages = "none";
-        subrace = "none";
+        age = tokens.get(2);
+        sizeDesc = tokens.get(3);//Needs to be converted to enum at some point
+        speed = Integer.parseInt(tokens.get(4));//Reads as string, stored as int
+        languages = tokens.get(5);
+        subrace = tokens.get(6);
     }
 
     public String printRace() {//Makes a string that represents all race data
@@ -35,8 +40,17 @@ public class PCRace {
                 print = print + ", ";
             }
         }
+        return print;
+    }
 
-
+    public String printASI() {
+        String print = "";
+        for(int i = 0; i < asi.size(); i++) {
+            print = print + asi.get(i).ability + "+" + asi.get(i).modifier;
+            if((i+1) < asi.size()) {
+                print = print + ", ";
+            }
+        }
         return print;
     }
 
