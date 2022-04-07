@@ -1,3 +1,5 @@
+import PCClass.*;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
@@ -26,6 +28,20 @@ public class guiDialog extends JDialog {
     private JLabel labelSpeed;
     private JLabel labelLanguages;
     private JLabel labelSubraces;
+    private JTabbedPane tabRace;
+    private ButtonGroup buttonGroupClass;
+    private JRadioButton radioButton10;
+    private JRadioButton radioButton11;
+    private JRadioButton radioButton12;
+    private JRadioButton radioButton13;
+    private JRadioButton radioButton14;
+    private JRadioButton radioButton15;
+    private JRadioButton radioButton16;
+    private JRadioButton radioButton17;
+    private JRadioButton radioButton18;
+    private JRadioButton radioButton19;
+    private JRadioButton radioButton20;
+    private JRadioButton radioButton21;
 
     public guiDialog() {
         setContentPane(contentPane);
@@ -33,6 +49,7 @@ public class guiDialog extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
 
         getRaceInfo();
+        getClassInfo();
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -125,10 +142,44 @@ public class guiDialog extends JDialog {
         }
     }
 
+    private void fillClassInfo(ArrayList<PCClass> classes) {
+        ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupClass.getElements());//get all buttons, convert from enum to array
+        for(int i = 0; i < buttons.size(); i++) {//For each button in array
+            buttons.get(i).setText((classes.get(i).getName()));//Set text = name
+        }
+    }
+
+    private void getClassInfo() {
+        try {
+            //Open file reader for classes
+            File dataSource = new File("src\\Data\\Classes.txt");
+            Scanner reader = new Scanner(dataSource);
+
+            //Make a list of all the Classes
+            ArrayList<PCClass> classes = new ArrayList<PCClass>();
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                PCClass temp = new PCClass(line);
+                classes.add(temp);
+            }
+            reader.close();
+
+            fillClassInfo(classes);
+
+        } catch (FileNotFoundException e) {//Catches if Classes.txt cannot be found
+            System.out.println("Classes.txt was not found");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         guiDialog dialog = new guiDialog();
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
