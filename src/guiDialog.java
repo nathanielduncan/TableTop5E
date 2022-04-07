@@ -1,6 +1,7 @@
 import PCClass.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,6 +30,7 @@ public class guiDialog extends JDialog {
     private JLabel labelLanguages;
     private JLabel labelSubraces;
     private JTabbedPane tabRace;
+
     private ButtonGroup buttonGroupClass;
     private JRadioButton radioButton10;
     private JRadioButton radioButton11;
@@ -42,6 +44,10 @@ public class guiDialog extends JDialog {
     private JRadioButton radioButton19;
     private JRadioButton radioButton20;
     private JRadioButton radioButton21;
+    private JLabel labelClassName;
+
+    private PCRace selectedRace;
+    private PCClass selectedClass;
 
     public guiDialog() {
         setContentPane(contentPane);
@@ -53,13 +59,13 @@ public class guiDialog extends JDialog {
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onOK();
+                onSubmit();
             }
         });
 
         buttonCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onCancel();
+                onClear();
             }
         });
 
@@ -79,14 +85,20 @@ public class guiDialog extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void onOK() {
-        // add your code here
-        dispose();
+    private void onSubmit() {
+        System.out.println(selectedRace.name);
+        System.out.println(selectedClass.getName());
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
+    }
+
+    private void onClear() {
+        buttonGroupRace.clearSelection();
+        selectedClass = new PCClass("none");
+        buttonGroupClass.clearSelection();
+        selectedRace = new PCRace("none");
     }
 
     private void fillRaceInfo(ArrayList<PCRace> races) {
@@ -96,7 +108,7 @@ public class guiDialog extends JDialog {
 
             int finalI = i;
             int width = 250;//For wrapping the description tests
-            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";
+            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
             buttons.get(i).addActionListener(new ActionListener() {//Add listener to button
                 @Override
                 public void actionPerformed(ActionEvent e) {//On button click, fill all lables with that races info
@@ -113,6 +125,8 @@ public class guiDialog extends JDialog {
                             "Languages: " + races.get(finalI).languages);
                     labelSubraces.setText(
                             "Subrace options: " + races.get(finalI).subrace);
+
+                    selectedRace = races.get(finalI);//And set that race to the 'selected race' variable
                 }
             });
 
@@ -146,6 +160,15 @@ public class guiDialog extends JDialog {
         ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupClass.getElements());//get all buttons, convert from enum to array
         for(int i = 0; i < buttons.size(); i++) {//For each button in array
             buttons.get(i).setText((classes.get(i).getName()));//Set text = name
+
+            int finalI = i;
+            buttons.get(i).addActionListener(new ActionListener() {//Add listener to button
+                @Override
+                public void actionPerformed(ActionEvent e) {//On button click, fill all labels with that races info
+                    selectedClass = classes.get(finalI);//And set that race to the 'selected race' variable
+
+                }
+            });
         }
     }
 
@@ -177,9 +200,5 @@ public class guiDialog extends JDialog {
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }
