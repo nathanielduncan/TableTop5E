@@ -1,11 +1,13 @@
 import PCClass.*;
+import Data.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+
+import static Data.dataAccess.testRead;
 
 public class guiDialog extends JDialog {
     private JPanel contentPane;
@@ -53,6 +55,8 @@ public class guiDialog extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+
+        testRead();
 
         getRaceInfo();
         getClassInfo();
