@@ -5,7 +5,7 @@ import java.sql.*;
 public class dataAccess {
     //This class is the SQL level of the data access framework.
 
-    public static void testRead() {
+    public static ResultSet getAllRaces() {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
 
@@ -14,12 +14,11 @@ public class dataAccess {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM races;");
 
-            while(rs.next()) {
-                System.out.println("Name = " + rs.getString("name"));
-            }
+            return rs;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 }

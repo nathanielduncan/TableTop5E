@@ -1,13 +1,12 @@
-import PCClass.*;
+import Data.PCClass.*;
 import Data.*;
+import Data.PCRace.PCRaceDesc;
 
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-
-import static Data.dataAccess.testRead;
 
 public class guiDialog extends JDialog {
     private JPanel contentPane;
@@ -25,12 +24,13 @@ public class guiDialog extends JDialog {
     private JRadioButton radioButton8;
     private JRadioButton radioButton9;
     private JLabel labelRaceName;
-    private JLabel labelASI;
     private JLabel labelAge;
     private JLabel labelSize;
     private JLabel labelSpeed;
     private JLabel labelLanguages;
     private JLabel labelSubraces;
+    private JLabel labelAlignment;
+    private JLabel labelFeatures;
     private JTabbedPane tabRace;
 
     private ButtonGroup buttonGroupClass;
@@ -48,7 +48,7 @@ public class guiDialog extends JDialog {
     private JRadioButton radioButton21;
     private JLabel labelClassName;
 
-    private PCRace selectedRace;
+    private PCRaceDesc selectedRace;
     private PCClass selectedClass;
 
     public guiDialog() {
@@ -56,10 +56,10 @@ public class guiDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        testRead();
+        oglDescription oglInfo = new oglDescription();//Gets database info for races {Will add classes and backgrounds}
+        fillRaceDesc(oglInfo.getRaceDescs());//handles the buttons on the race page, and the label info
 
-        getRaceInfo();
-        getClassInfo();
+        getClassInfo();//Reads from flat file and then does class buttons and lables {To be integrated with oglInfo, with DB}
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -90,7 +90,7 @@ public class guiDialog extends JDialog {
     }
 
     private void onSubmit() {
-        System.out.println(selectedRace.name);
+        System.out.println(selectedRace.getName());
         System.out.println(selectedClass.getName());
     }
 
@@ -102,61 +102,25 @@ public class guiDialog extends JDialog {
         buttonGroupRace.clearSelection();
         selectedClass = new PCClass("none");
         buttonGroupClass.clearSelection();
-        selectedRace = new PCRace("none");
+        selectedRace = new PCRaceDesc();
     }
 
-    private void fillRaceInfo(ArrayList<PCRace> races) {
+    private void fillRaceDesc(ArrayList<PCRaceDesc> races) {
         ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupRace.getElements());//get all buttons, convert from enum to array
-        for(int i = 0; i < buttons.size(); i++) {//For each button in array
-            buttons.get(i).setText((races.get(i).name));//Set text = name
+        Integer raceCount = 0;
+        for (AbstractButton button : buttons) {
+            button.setText(races.get(raceCount).getName());//set text = name
 
-            int finalI = i;
-            int width = 250;//For wrapping the description tests
+            int width = 250;
             String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
-            buttons.get(i).addActionListener(new ActionListener() {//Add listener to button
+            Integer finalRaceCount = raceCount;
+            button.addActionListener(new ActionListener() {//Add listener to button
                 @Override
                 public void actionPerformed(ActionEvent e) {//On button click, fill all lables with that races info
-                    labelRaceName.setText(races.get(finalI).name);
-                    labelASI.setText(
-                            "Ability Score Increases: " + races.get(finalI).printASI());
-                    labelAge.setText(String.format(format, width,
-                            "Age: " + races.get(finalI).age));
-                    labelSize.setText(String.format(format, width,
-                            "Size: " + races.get(finalI).sizeDesc));
-                    labelSpeed.setText(
-                            "Speed: " + races.get(finalI).speed.toString());//Stored as int, writes as string
-                    labelLanguages.setText(
-                            "Languages: " + races.get(finalI).languages);
-                    labelSubraces.setText(
-                            "Subrace options: " + races.get(finalI).subrace);
-
-                    selectedRace = races.get(finalI);//And set that race to the 'selected race' variable
+                    raceButtonClicked(button, races.get(finalRaceCount));
                 }
             });
-
-        }
-    }
-
-    private void getRaceInfo() {
-        try {
-            //Open file reader for Races
-            File dataSource = new File("src\\Data\\Races.txt");
-            Scanner reader = new Scanner(dataSource);
-
-            //Make a list of all Races
-            ArrayList<PCRace> races = new ArrayList<PCRace>();
-            while (reader.hasNextLine()) {//Fill in the Race list from Race file
-                String line = reader.nextLine();
-                PCRace temp = new PCRace(line);
-                races.add(temp);
-            }
-            reader.close();
-
-            fillRaceInfo(races);//Assigns races to buttons
-
-        } catch (FileNotFoundException e) {//Catches if Races.txt cannot be found
-            System.out.println("Races.txt was not found");
-            e.printStackTrace();
+            raceCount++;
         }
     }
 
@@ -199,7 +163,33 @@ public class guiDialog extends JDialog {
         }
     }
 
-    public static void main(String[] args) {
+    public void raceButtonClicked(AbstractButton button, PCRaceDesc raceDesc) {
+        int width = 250;//For wrapping the description tests
+        String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
+
+                //Set each label on the page with the correct information for that race
+        labelRaceName.setText(String.format(format, width,
+                raceDesc.getName()));
+        labelAlignment.setText(String.format(format, width,
+                "Alignment: " + raceDesc.getAlignmentD()));
+        labelAge.setText(String.format(format, width,
+                "Age: " + raceDesc.getAgeD()));
+        labelSize.setText(String.format(format, width,
+                "Size: " + raceDesc.getSizeD()));
+        labelSpeed.setText(String.format(format, width,
+                "Speed: " + raceDesc.getSpeedD()));
+        labelFeatures.setText(String.format(format, width,
+                "Features: " + raceDesc.getFeatures()));
+        labelLanguages.setText(String.format(format, width,
+                "Language: " + raceDesc.getLanguageD()));
+        labelSubraces.setText(String.format(format, width,
+                "Subraces: " + raceDesc.getSubraces()));
+
+        selectedRace = raceDesc;//And set that race to the 'selected race' variable
+
+    }
+
+        public static void main(String[] args) {
         guiDialog dialog = new guiDialog();
         dialog.pack();
         dialog.setVisible(true);

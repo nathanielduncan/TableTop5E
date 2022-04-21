@@ -1,4 +1,4 @@
-package PCClass;
+package Data.PCRace;
 
 public class ASI {//Ability Score Increase
     String ability;

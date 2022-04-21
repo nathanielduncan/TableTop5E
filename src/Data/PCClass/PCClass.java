@@ -1,4 +1,4 @@
-package PCClass;
+package Data.PCClass;
 
 public class PCClass {
     String name;
