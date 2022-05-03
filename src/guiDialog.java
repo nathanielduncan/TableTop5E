@@ -3,9 +3,8 @@ import Data.*;
 import Data.PCRace.PCRaceDesc;
 
 import javax.swing.*;
+import java.awt.GridLayout;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 public class guiDialog extends JDialog {
@@ -30,36 +29,39 @@ public class guiDialog extends JDialog {
     private JLabel labelLanguages;
     private JLabel labelSubraces;
     private JLabel labelAlignment;
-    private JLabel labelFeatures;
+    private JLabel labelRaceFeatures;
     private JTabbedPane tabRace;
 
     private ButtonGroup buttonGroupClass;
-    private JRadioButton radioButton10;
-    private JRadioButton radioButton11;
-    private JRadioButton radioButton12;
-    private JRadioButton radioButton13;
-    private JRadioButton radioButton14;
-    private JRadioButton radioButton15;
-    private JRadioButton radioButton16;
-    private JRadioButton radioButton17;
-    private JRadioButton radioButton18;
-    private JRadioButton radioButton19;
-    private JRadioButton radioButton20;
-    private JRadioButton radioButton21;
     private JLabel labelClassName;
+    private JPanel panelClassButtons;
+    private JLabel labelHitDice;
+    private JLabel labelArmor;
+    private JLabel labelWeapons;
+    private JLabel labelTools;
+    private JLabel labelSavingThrows;
+    private JLabel labelSkills;
+    private JLabel labelEquipment;
+    private JLabel labelClassFeatures;
+    private JLabel labelASI;
+    private JLabel labelSubclasses;
 
     private PCRaceDesc selectedRace;
-    private PCClass selectedClass;
+    private PCClassDesc selectedClass;
 
     public guiDialog() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        oglDescription oglInfo = new oglDescription();//Gets database info for races {Will add classes and backgrounds}
+        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes {Will add backgrounds}
         fillRaceDesc(oglInfo.getRaceDescs());//handles the buttons on the race page, and the label info
 
-        getClassInfo();//Reads from flat file and then does class buttons and lables {To be integrated with oglInfo, with DB}
+    //Class buttons happen where GUI is made
+        //fillClassDesc(oglInfo.getClassDescs());
+        //makeClassButtons(oglInfo.getClassDescs());
+
+        //getClassInfo();//Reads from flat file and then does class buttons and lables {To be integrated with oglInfo, with DB}
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -100,7 +102,7 @@ public class guiDialog extends JDialog {
 
     private void onClear() {
         buttonGroupRace.clearSelection();
-        selectedClass = new PCClass("none");
+        selectedClass = new PCClassDesc();
         buttonGroupClass.clearSelection();
         selectedRace = new PCRaceDesc();
     }
@@ -124,45 +126,6 @@ public class guiDialog extends JDialog {
         }
     }
 
-    private void fillClassInfo(ArrayList<PCClass> classes) {
-        ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupClass.getElements());//get all buttons, convert from enum to array
-        for(int i = 0; i < buttons.size(); i++) {//For each button in array
-            buttons.get(i).setText((classes.get(i).getName()));//Set text = name
-
-            int finalI = i;
-            buttons.get(i).addActionListener(new ActionListener() {//Add listener to button
-                @Override
-                public void actionPerformed(ActionEvent e) {//On button click, fill all labels with that races info
-                    selectedClass = classes.get(finalI);//And set that race to the 'selected race' variable
-
-                }
-            });
-        }
-    }
-
-    private void getClassInfo() {
-        try {
-            //Open file reader for classes
-            File dataSource = new File("src\\Data\\Classes.txt");
-            Scanner reader = new Scanner(dataSource);
-
-            //Make a list of all the Classes
-            ArrayList<PCClass> classes = new ArrayList<PCClass>();
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                PCClass temp = new PCClass(line);
-                classes.add(temp);
-            }
-            reader.close();
-
-            fillClassInfo(classes);
-
-        } catch (FileNotFoundException e) {//Catches if Classes.txt cannot be found
-            System.out.println("Classes.txt was not found");
-            e.printStackTrace();
-        }
-    }
-
     public void raceButtonClicked(AbstractButton button, PCRaceDesc raceDesc) {
         int width = 250;//For wrapping the description tests
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
@@ -178,7 +141,7 @@ public class guiDialog extends JDialog {
                 "Size: " + raceDesc.getSizeD()));
         labelSpeed.setText(String.format(format, width,
                 "Speed: " + raceDesc.getSpeedD()));
-        labelFeatures.setText(String.format(format, width,
+        labelRaceFeatures.setText(String.format(format, width,
                 "Features: " + raceDesc.getFeatures()));
         labelLanguages.setText(String.format(format, width,
                 "Language: " + raceDesc.getLanguageD()));
@@ -186,7 +149,37 @@ public class guiDialog extends JDialog {
                 "Subraces: " + raceDesc.getSubraces()));
 
         selectedRace = raceDesc;//And set that race to the 'selected race' variable
+    }
 
+    public void classButtonClicked(AbstractButton button, PCClassDesc classDesc) {
+        System.out.println(classDesc.getName() + " clicked!");
+        int width = 250;//For wrapping the description tests
+        String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
+
+        labelClassName.setText((String.format(format, width,
+                classDesc.getName())));
+        labelHitDice.setText((String.format(format, width,
+                "Hit Dice: " + classDesc.getHitDice())));
+        labelArmor.setText((String.format(format, width,
+                "Armor: " + classDesc.getArmor())));
+        labelWeapons.setText((String.format(format, width,
+                "Weapons: " + classDesc.getWeapons())));
+        labelTools.setText((String.format(format, width,
+                "Tools: " + classDesc.getTools())));
+        labelSavingThrows.setText((String.format(format, width,
+                "Saving Throws: " + classDesc.getSavingThrows())));
+        labelSkills.setText((String.format(format, width,
+                "Skills: " + classDesc.getSkills())));
+        labelEquipment.setText((String.format(format, width,
+                "Equipment: " + classDesc.getEquipment())));
+        labelClassFeatures.setText((String.format(format, width,
+                "Features: " + classDesc.getFeatures())));
+        labelASI.setText((String.format(format, width,
+                "Ability Score Improvement: " + classDesc.getAsi())));
+        labelSubclasses.setText((String.format(format, width,
+                "Subclasses: " + classDesc.getSubclasses())));
+
+        selectedClass = classDesc;
     }
 
         public static void main(String[] args) {
@@ -195,4 +188,39 @@ public class guiDialog extends JDialog {
         dialog.setVisible(true);
         System.exit(0);
     }
+
+    private void createUIComponents() {
+        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes {Will add backgrounds}
+            //^^^Probably need a function to just do the names for the buttons, don't need all ogl info here^^^
+
+        panelClassButtons = new JPanel();//Panel for class buttons
+        panelClassButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
+        buttonGroupClass = new ButtonGroup();//Buttongroup for class buttons
+
+        makeClassButtons(oglInfo.getClassDescs());
+
+
+    }
+
+    private void makeClassButtons(ArrayList<PCClassDesc> classes) {
+
+        for (PCClassDesc PCClass : classes) { //per class from DB
+            JRadioButton button = new JRadioButton();//Create a new button
+
+            button.setText(PCClass.getName());//Set button text
+            panelClassButtons.add(button);//Add the button to the panel
+            buttonGroupClass.add(button);//Add the button to the group
+
+            int width = 250;
+            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
+            button.addActionListener(new ActionListener() {//Add click function for the button
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    classButtonClicked(button, PCClass);
+                }
+            });
+
+        }
+    }
+
 }
