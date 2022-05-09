@@ -1,6 +1,5 @@
 package Data;
 
-import Data.PCClass.PCClass;
 import Data.PCClass.PCClassDesc;
 import Data.PCRace.PCRaceDesc;
 

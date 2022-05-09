@@ -9,8 +9,6 @@ public class dataAccess {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
 
-            System.out.println("Connection made!");
-
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM races;");
 
@@ -25,8 +23,6 @@ public class dataAccess {
     public static ResultSet getAllClasses() {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
-
-            System.out.println("Connection made!");
 
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM classes;");

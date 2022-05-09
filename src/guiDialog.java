@@ -56,12 +56,7 @@ public class guiDialog extends JDialog {
 
         oglDescription oglInfo = new oglDescription();//Gets database info for races and classes {Will add backgrounds}
         fillRaceDesc(oglInfo.getRaceDescs());//handles the buttons on the race page, and the label info
-
     //Class buttons happen where GUI is made
-        //fillClassDesc(oglInfo.getClassDescs());
-        //makeClassButtons(oglInfo.getClassDescs());
-
-        //getClassInfo();//Reads from flat file and then does class buttons and lables {To be integrated with oglInfo, with DB}
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -126,7 +121,7 @@ public class guiDialog extends JDialog {
         }
     }
 
-    public void raceButtonClicked(AbstractButton button, PCRaceDesc raceDesc) {
+    public void raceButtonClicked(AbstractButton button, PCRaceDesc raceDesc) {//When creating action
         int width = 250;//For wrapping the description tests
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
 
@@ -151,11 +146,12 @@ public class guiDialog extends JDialog {
         selectedRace = raceDesc;//And set that race to the 'selected race' variable
     }
 
-    public void classButtonClicked(AbstractButton button, PCClassDesc classDesc) {
+    public void classButtonClicked(AbstractButton button, PCClassDesc classDesc) {//When creating action
         System.out.println(classDesc.getName() + " clicked!");
         int width = 250;//For wrapping the description tests
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
 
+                    //Assign each associated label with information from the class chosen
         labelClassName.setText((String.format(format, width,
                 classDesc.getName())));
         labelHitDice.setText((String.format(format, width,
