@@ -13,6 +13,20 @@ public class PCClassDesc {
     String asi = null;
     String subclasses = null;
 
+    public void clear() {//When selection is cleared in GUI, saved object loses all data
+        name = null;
+        hitDice = null;
+        armor = null;
+        weapons = null;
+        tools = null;
+        savingThrows = null;
+        skills = null;
+        equipment = null;
+        features = null;
+        asi = null;
+        subclasses = null;
+    }
+
 //Getters and setters
     public String getName() {
         return name;

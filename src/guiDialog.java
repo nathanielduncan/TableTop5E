@@ -12,16 +12,10 @@ public class guiDialog extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
 
+    //Race page
+    private JTabbedPane tabRace;
+    private JPanel panelRaceButtons;
     private ButtonGroup buttonGroupRace;
-    private JRadioButton radioButton1;
-    private JRadioButton radioButton2;
-    private JRadioButton radioButton3;
-    private JRadioButton radioButton4;
-    private JRadioButton radioButton5;
-    private JRadioButton radioButton6;
-    private JRadioButton radioButton7;
-    private JRadioButton radioButton8;
-    private JRadioButton radioButton9;
     private JLabel labelRaceName;
     private JLabel labelAge;
     private JLabel labelSize;
@@ -30,11 +24,11 @@ public class guiDialog extends JDialog {
     private JLabel labelSubraces;
     private JLabel labelAlignment;
     private JLabel labelRaceFeatures;
-    private JTabbedPane tabRace;
 
+    //Class page
+    private JPanel panelClassButtons;
     private ButtonGroup buttonGroupClass;
     private JLabel labelClassName;
-    private JPanel panelClassButtons;
     private JLabel labelHitDice;
     private JLabel labelArmor;
     private JLabel labelWeapons;
@@ -54,9 +48,8 @@ public class guiDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes {Will add backgrounds}
-        fillRaceDesc(oglInfo.getRaceDescs());//handles the buttons on the race page, and the label info
-    //Class buttons happen where GUI is made
+        //CreateUIComponents builds all the buttons with their onClick actions and data from the DB for all the labels
+
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -97,28 +90,9 @@ public class guiDialog extends JDialog {
 
     private void onClear() {
         buttonGroupRace.clearSelection();
-        selectedClass = new PCClassDesc();
+        selectedClass.clear();
         buttonGroupClass.clearSelection();
-        selectedRace = new PCRaceDesc();
-    }
-
-    private void fillRaceDesc(ArrayList<PCRaceDesc> races) {
-        ArrayList<AbstractButton> buttons = doWork.getButtonArray(buttonGroupRace.getElements());//get all buttons, convert from enum to array
-        Integer raceCount = 0;
-        for (AbstractButton button : buttons) {
-            button.setText(races.get(raceCount).getName());//set text = name
-
-            int width = 250;
-            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
-            Integer finalRaceCount = raceCount;
-            button.addActionListener(new ActionListener() {//Add listener to button
-                @Override
-                public void actionPerformed(ActionEvent e) {//On button click, fill all lables with that races info
-                    raceButtonClicked(button, races.get(finalRaceCount));
-                }
-            });
-            raceCount++;
-        }
+        selectedRace.clear();
     }
 
     public void raceButtonClicked(AbstractButton button, PCRaceDesc raceDesc) {//When creating action
@@ -186,21 +160,42 @@ public class guiDialog extends JDialog {
     }
 
     private void createUIComponents() {
-        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes {Will add backgrounds}
-            //^^^Probably need a function to just do the names for the buttons, don't need all ogl info here^^^
+        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes TODO: add backgrounds
 
+        //Choose class page
         panelClassButtons = new JPanel();//Panel for class buttons
         panelClassButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
         buttonGroupClass = new ButtonGroup();//Buttongroup for class buttons
-
         makeClassButtons(oglInfo.getClassDescs());
 
+        //Choose Race page
+        panelRaceButtons = new JPanel();//Panel for race buttons
+        panelRaceButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
+        buttonGroupRace = new ButtonGroup();//Buttongroup for race buttons
+        makeRaceButtons(oglInfo.getRaceDescs());
+    }
 
+    private void makeRaceButtons(ArrayList<PCRaceDesc> races) {
+        for (PCRaceDesc PCRace : races) {//Creates a button for every race listed in the DB
+            JRadioButton button = new JRadioButton();
+
+            button.setText(PCRace.getName());
+            panelRaceButtons.add(button);
+            buttonGroupRace.add(button);
+
+            int width = 250;
+            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
+            button.addActionListener(new ActionListener() {//Add click function for the button that fills in all labels with info from DB
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    raceButtonClicked(button, PCRace);
+                }
+            });
+        }
     }
 
     private void makeClassButtons(ArrayList<PCClassDesc> classes) {
-
-        for (PCClassDesc PCClass : classes) { //per class from DB
+        for (PCClassDesc PCClass : classes) {//Creates a button for every class listed in the DB
             JRadioButton button = new JRadioButton();//Create a new button
 
             button.setText(PCClass.getName());//Set button text
@@ -209,7 +204,7 @@ public class guiDialog extends JDialog {
 
             int width = 250;
             String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
-            button.addActionListener(new ActionListener() {//Add click function for the button
+            button.addActionListener(new ActionListener() {//Add click function for the button that fills in all labels with info from DB
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     classButtonClicked(button, PCClass);
