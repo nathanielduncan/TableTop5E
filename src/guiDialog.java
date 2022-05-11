@@ -51,17 +51,9 @@ public class guiDialog extends JDialog {
         //CreateUIComponents builds all the buttons with their onClick actions and data from the DB for all the labels
 
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onSubmit();
-            }
-        });
+        buttonOK.addActionListener(e -> onSubmit());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onClear();
-            }
-        });
+        buttonCancel.addActionListener(e -> onClear());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -72,11 +64,8 @@ public class guiDialog extends JDialog {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void onSubmit() {
@@ -95,7 +84,7 @@ public class guiDialog extends JDialog {
         selectedRace.clear();
     }
 
-    public void raceButtonClicked(AbstractButton button, PCRaceDesc raceDesc) {//When creating action
+    public void raceButtonClicked(PCRaceDesc raceDesc) {//When creating action
         int width = 250;//For wrapping the description tests
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
 
@@ -120,8 +109,7 @@ public class guiDialog extends JDialog {
         selectedRace = raceDesc;//And set that race to the 'selected race' variable
     }
 
-    public void classButtonClicked(AbstractButton button, PCClassDesc classDesc) {//When creating action
-        System.out.println(classDesc.getName() + " clicked!");
+    public void classButtonClicked(PCClassDesc classDesc) {//When creating action
         int width = 250;//For wrapping the description tests
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
 
@@ -183,14 +171,8 @@ public class guiDialog extends JDialog {
             panelRaceButtons.add(button);
             buttonGroupRace.add(button);
 
-            int width = 250;
-            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
-            button.addActionListener(new ActionListener() {//Add click function for the button that fills in all labels with info from DB
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    raceButtonClicked(button, PCRace);
-                }
-            });
+            //Add click function for the button that fills in all labels with info from DB
+            button.addActionListener(e -> raceButtonClicked(PCRace));
         }
     }
 
@@ -202,14 +184,8 @@ public class guiDialog extends JDialog {
             panelClassButtons.add(button);//Add the button to the panel
             buttonGroupClass.add(button);//Add the button to the group
 
-            int width = 250;
-            String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
-            button.addActionListener(new ActionListener() {//Add click function for the button that fills in all labels with info from DB
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    classButtonClicked(button, PCClass);
-                }
-            });
+            //Add click function for the button that fills in all labels with info from DB
+            button.addActionListener(e -> classButtonClicked(PCClass));
 
         }
     }
