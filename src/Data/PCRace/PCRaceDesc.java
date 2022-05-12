@@ -10,18 +10,6 @@ public class PCRaceDesc {
     String languageD = null;//This should be the DESCRIPTION of the races language. Language options are somewhere else
     String subraces = null;//This should be the names of the subraces, their descriptions should be somewhere else.
 
-    public void clear() {//When selection is cleared in GUI, saved object loses all data
-        name = null;
-        ageD = null;
-        alignmentD = null;
-        sizeD = null;
-        speedD = null;
-        features = null;
-        languageD = null;
-        subraces = null;
-    }
-
-
     //Get and Set functions for all^^^
     public String getName() {
         return name;

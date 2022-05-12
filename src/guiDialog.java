@@ -3,7 +3,7 @@ import Data.*;
 import Data.PCRace.PCRaceDesc;
 
 import javax.swing.*;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
@@ -49,10 +49,9 @@ public class guiDialog extends JDialog {
     private JLabel labelBackGLanguages;
     private JLabel labelBackGEquipment;
     private JLabel labelBackGFeature;
-
-    private PCRaceDesc selectedRace;
-    private PCClassDesc selectedClass;
-    private PCBackGDesc selectedBackground;
+    private JPanel panelRaceLabels;
+    private JPanel panelClassLabels;
+    private JPanel panelBackGLabels;
 
     public guiDialog() {
         setContentPane(contentPane);
@@ -81,9 +80,13 @@ public class guiDialog extends JDialog {
     }
 
     private void onSubmit() {
-        System.out.println(selectedRace.getName());
-        System.out.println(selectedClass.getName());
-        System.out.println(selectedBackground.getName());
+        String selected;
+
+        selected = buttonGroupRace.getSelection().getActionCommand() + " "//Get the button group . get the selected button . get the title of the button
+                + buttonGroupClass.getSelection().getActionCommand() + " "
+                + buttonGroupBackG.getSelection().getActionCommand();
+
+        System.out.println(selected);
     }
 
     private void onCancel() {
@@ -92,11 +95,39 @@ public class guiDialog extends JDialog {
 
     private void onClear() {
         buttonGroupRace.clearSelection();
-        selectedClass.clear();
         buttonGroupClass.clearSelection();
-        selectedRace.clear();
         buttonGroupBackG.clearSelection();
-        selectedBackground.clear();
+
+        clearLabels();
+    }
+
+    private void clearLabels() {
+        //Race Labels
+        Component[] components = panelRaceLabels.getComponents();//Get all components in panel
+        for (Component component : components) {//For each component
+            if (component instanceof JLabel label) {//If it is a label
+                label.setText("");//Remove text
+            }
+        }
+        labelRaceName.setText("Choose a Race");//Reset name
+
+        //Class Labels
+        components = panelClassLabels.getComponents();//Get all components in the panel
+        for(Component component : components) {//For each component
+            if (component instanceof JLabel label) {//If it is a label
+                label.setText("");//Remove text
+            }
+        }
+        labelClassName.setText("Choose a Class");//Reset name
+
+        //Background labels
+        components = panelBackGLabels.getComponents();//Get all components
+        for (Component component : components) {//For each component
+            if (component instanceof JLabel label) {//If it is a label
+                label.setText("");//Remove text
+            }
+        }
+        labelBackGName.setText("Choose a Background");//Reset name
     }
 
     public void raceButtonClicked(PCRaceDesc raceDesc) {//When creating action
@@ -120,8 +151,6 @@ public class guiDialog extends JDialog {
                 "Language: " + raceDesc.getLanguageD()));
         labelSubraces.setText(String.format(format, width,
                 "Subraces: " + raceDesc.getSubraces()));
-
-        selectedRace = raceDesc;//And set that race to the 'selected race' variable
     }
 
     public void classButtonClicked(PCClassDesc classDesc) {//When creating action
@@ -151,8 +180,6 @@ public class guiDialog extends JDialog {
                 "Ability Score Improvement: " + classDesc.getAsi())));
         labelSubclasses.setText((String.format(format, width,
                 "Subclasses: " + classDesc.getSubclasses())));
-
-        selectedClass = classDesc;
     }
 
     private void backGButtonClicked(PCBackGDesc backGDesc) {
@@ -171,11 +198,9 @@ public class guiDialog extends JDialog {
                 "Equipment: " + backGDesc.getEquipment())));
         labelBackGFeature.setText((String.format(format, width,
                 "Feature: " + backGDesc.getFeature())));
-
-        selectedBackground = backGDesc;
     }
 
-        public static void main(String[] args) {
+    public static void main(String[] args) {
         guiDialog dialog = new guiDialog();
         dialog.pack();
         dialog.setVisible(true);
@@ -189,18 +214,21 @@ public class guiDialog extends JDialog {
         panelClassButtons = new JPanel();//Panel for class buttons
         panelClassButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
         buttonGroupClass = new ButtonGroup();//Buttongroup for class buttons
+        panelClassLabels = new JPanel();//Panel for class labels
         makeClassButtons(oglInfo.getClassDescs());
 
         //Choose Race page
         panelRaceButtons = new JPanel();//Panel for race buttons
         panelRaceButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
         buttonGroupRace = new ButtonGroup();//Buttongroup for race buttons
+        panelRaceLabels = new JPanel();//Panel for race labels
         makeRaceButtons(oglInfo.getRaceDescs());
 
         //Choose Background page
         panelBackGButtons = new JPanel();//Panel for background buttons
         panelBackGButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
         buttonGroupBackG = new ButtonGroup();//Buttongroup for background buttons
+        panelBackGLabels = new JPanel();//Panel for background labels
         makeBackGButtons(oglInfo.getBackGDescs());
 
     }
@@ -212,6 +240,9 @@ public class guiDialog extends JDialog {
             button.setText(PCRace.getName());
             panelRaceButtons.add(button);
             buttonGroupRace.add(button);
+
+            //When getAction is called, it will return the text on the button
+            button.setActionCommand(PCRace.getName());
 
             //Add click function for the button that fills in all labels with info from DB
             button.addActionListener(e -> raceButtonClicked(PCRace));
@@ -226,6 +257,9 @@ public class guiDialog extends JDialog {
             panelClassButtons.add(button);//Add the button to the panel
             buttonGroupClass.add(button);//Add the button to the group
 
+            //When getAction is called, it will return the text on the button
+            button.setActionCommand(PCClass.getName());
+
             //Add click function for the button that fills in all labels with info from DB
             button.addActionListener(e -> classButtonClicked(PCClass));
 
@@ -233,13 +267,17 @@ public class guiDialog extends JDialog {
     }
 
     private void makeBackGButtons(ArrayList<PCBackGDesc> backgrounds) {
-        for (PCBackGDesc PCBackG : backgrounds) {
-            JRadioButton button = new JRadioButton();
+        for (PCBackGDesc PCBackG : backgrounds) {//Creates a button for every background listed in the DB
+            JRadioButton button = new JRadioButton();//Create a new button
 
-            button.setText(PCBackG.getName());
-            panelBackGButtons.add(button);
-            buttonGroupBackG.add(button);
+            button.setText(PCBackG.getName());//Set button Text
+            panelBackGButtons.add(button);//Add the button to the panel
+            buttonGroupBackG.add(button);//Add the button to the group
 
+            //When getAction is called, it will return the text on the button
+            button.setActionCommand(PCBackG.getName());
+
+            //Add client function for the button, that fills in all labels with info from DB
             button.addActionListener(e -> backGButtonClicked(PCBackG));
         }
     }
