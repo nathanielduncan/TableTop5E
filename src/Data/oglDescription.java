@@ -15,6 +15,7 @@ public class oglDescription {
 
     ArrayList<PCRaceDesc> raceDescs = new ArrayList<PCRaceDesc>();
     ArrayList<PCClassDesc> classDescs = new ArrayList<PCClassDesc>();
+    ArrayList<PCBackGDesc> backGDescs = new ArrayList<PCBackGDesc>();
 
     public oglDescription() {//Constructor
         //race information
@@ -62,11 +63,28 @@ public class oglDescription {
             e.printStackTrace();
         }
 
+        //Background information
+        results = dataAccess.getAllBackgrounds();
+        try {
+            while (results.next()) {
+                PCBackGDesc temp = new PCBackGDesc();
+
+                temp.setName(results.getString("name"));
+                temp.setDescription(results.getString("description"));
+                temp.setSkills(results.getString("skills"));
+                temp.setLanguages(results.getString("languages"));
+                temp.setEquipment(results.getString("equipment"));
+                temp.setFeature(results.getString("feature"));
+
+                backGDescs.add(temp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     //Getters and setters
-    public ArrayList<PCRaceDesc> getRaceDescs() {
-        return raceDescs;
-    }
+    public ArrayList<PCRaceDesc> getRaceDescs() {return raceDescs;}
     public ArrayList<PCClassDesc> getClassDescs() {return classDescs;}
+    public ArrayList<PCBackGDesc> getBackGDescs() {return backGDescs;}
 }

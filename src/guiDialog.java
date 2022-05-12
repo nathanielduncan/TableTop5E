@@ -8,12 +8,12 @@ import java.awt.event.*;
 import java.util.*;
 
 public class guiDialog extends JDialog {
+    //Outside tabbed pages - persistent
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+    private JButton buttonSubmit;
+    private JButton buttonClear;
 
     //Race page
-    private JTabbedPane tabRace;
     private JPanel panelRaceButtons;
     private ButtonGroup buttonGroupRace;
     private JLabel labelRaceName;
@@ -40,20 +40,32 @@ public class guiDialog extends JDialog {
     private JLabel labelASI;
     private JLabel labelSubclasses;
 
+    //Background page
+    private JPanel panelBackGButtons;
+    private ButtonGroup buttonGroupBackG;
+    private JLabel labelBackGName;
+    private JLabel labelBackGDesc;
+    private JLabel labelBackGSkills;
+    private JLabel labelBackGLanguages;
+    private JLabel labelBackGEquipment;
+    private JLabel labelBackGFeature;
+
     private PCRaceDesc selectedRace;
     private PCClassDesc selectedClass;
+    private PCBackGDesc selectedBackground;
 
     public guiDialog() {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(buttonSubmit);
 
         //CreateUIComponents builds all the buttons with their onClick actions and data from the DB for all the labels
 
+        //submit button onClick runs submit function
+        buttonSubmit.addActionListener(e -> onSubmit());
 
-        buttonOK.addActionListener(e -> onSubmit());
-
-        buttonCancel.addActionListener(e -> onClear());
+        //Clear button onClick runs clear function
+        buttonClear.addActionListener(e -> onClear());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -71,6 +83,7 @@ public class guiDialog extends JDialog {
     private void onSubmit() {
         System.out.println(selectedRace.getName());
         System.out.println(selectedClass.getName());
+        System.out.println(selectedBackground.getName());
     }
 
     private void onCancel() {
@@ -82,6 +95,8 @@ public class guiDialog extends JDialog {
         selectedClass.clear();
         buttonGroupClass.clearSelection();
         selectedRace.clear();
+        buttonGroupBackG.clearSelection();
+        selectedBackground.clear();
     }
 
     public void raceButtonClicked(PCRaceDesc raceDesc) {//When creating action
@@ -140,6 +155,26 @@ public class guiDialog extends JDialog {
         selectedClass = classDesc;
     }
 
+    private void backGButtonClicked(PCBackGDesc backGDesc) {
+        int width = 250;//For wrapping the description tests
+        String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
+
+        labelBackGName.setText((String.format(format, width,
+                backGDesc.getName())));
+        labelBackGDesc.setText((String.format(format, width,
+                "Description: " + backGDesc.getDescription())));
+        labelBackGSkills.setText((String.format(format, width,
+                "Skills: " + backGDesc.getSkills())));
+        labelBackGLanguages.setText((String.format(format, width,
+                "Languages: " + backGDesc.getLanguages())));
+        labelBackGEquipment.setText((String.format(format, width,
+                "Equipment: " + backGDesc.getEquipment())));
+        labelBackGFeature.setText((String.format(format, width,
+                "Feature: " + backGDesc.getFeature())));
+
+        selectedBackground = backGDesc;
+    }
+
         public static void main(String[] args) {
         guiDialog dialog = new guiDialog();
         dialog.pack();
@@ -148,7 +183,7 @@ public class guiDialog extends JDialog {
     }
 
     private void createUIComponents() {
-        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes TODO: add backgrounds
+        oglDescription oglInfo = new oglDescription();//Gets database info for races and classes
 
         //Choose class page
         panelClassButtons = new JPanel();//Panel for class buttons
@@ -161,6 +196,13 @@ public class guiDialog extends JDialog {
         panelRaceButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
         buttonGroupRace = new ButtonGroup();//Buttongroup for race buttons
         makeRaceButtons(oglInfo.getRaceDescs());
+
+        //Choose Background page
+        panelBackGButtons = new JPanel();//Panel for background buttons
+        panelBackGButtons.setLayout(new GridLayout(0,1));//Rows not specified, one column
+        buttonGroupBackG = new ButtonGroup();//Buttongroup for background buttons
+        makeBackGButtons(oglInfo.getBackGDescs());
+
     }
 
     private void makeRaceButtons(ArrayList<PCRaceDesc> races) {
@@ -187,6 +229,18 @@ public class guiDialog extends JDialog {
             //Add click function for the button that fills in all labels with info from DB
             button.addActionListener(e -> classButtonClicked(PCClass));
 
+        }
+    }
+
+    private void makeBackGButtons(ArrayList<PCBackGDesc> backgrounds) {
+        for (PCBackGDesc PCBackG : backgrounds) {
+            JRadioButton button = new JRadioButton();
+
+            button.setText(PCBackG.getName());
+            panelBackGButtons.add(button);
+            buttonGroupBackG.add(button);
+
+            button.addActionListener(e -> backGButtonClicked(PCBackG));
         }
     }
 
