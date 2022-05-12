@@ -200,13 +200,6 @@ public class guiDialog extends JDialog {
                 "Feature: " + backGDesc.getFeature())));
     }
 
-    public static void main(String[] args) {
-        guiDialog dialog = new guiDialog();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
-
     private void createUIComponents() {
         oglDescription oglInfo = new oglDescription();//Gets database info for races and classes
 
