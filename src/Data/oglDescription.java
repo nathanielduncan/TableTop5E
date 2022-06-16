@@ -4,6 +4,7 @@ import Data.PCClass.PCClassDesc;
 import Data.PCRace.PCRaceDesc;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,11 +14,29 @@ public class oglDescription {
     // DB is accessed using dataAccess class
 
 
-    ArrayList<PCRaceDesc> raceDescs = new ArrayList<PCRaceDesc>();
-    ArrayList<PCClassDesc> classDescs = new ArrayList<PCClassDesc>();
-    ArrayList<PCBackGDesc> backGDescs = new ArrayList<PCBackGDesc>();
+    ArrayList<PCRaceDesc> raceDescs = new ArrayList<>();
+    ArrayList<PCClassDesc> classDescs = new ArrayList<>();
+    ArrayList<PCBackGDesc> backGDescs = new ArrayList<>();
+    Integer classColsCount;
+    Integer raceColsCount;
+    Integer backGColsCount;
+    ArrayList<String> classColsNames = new ArrayList<>();
+    ArrayList<String> raceColsNames = new ArrayList<>();
+    ArrayList<String> backGColsNames = new ArrayList<>();
+
 
     public oglDescription() {//Constructor
+        //Fill the arrays with description objects
+        getRaceInfo();
+        getClassInfo();
+        getBackGInfo();
+
+        //Get column numbers(also stores names in strings defined above)
+        classColsCount = getClassCols();
+        raceColsCount = getRaceCols();
+        backGColsCount = getBackGCols();
+    }
+    private void getRaceInfo() {
         //race information
         ResultSet results = dataAccess.getAllRaces();//DataAccess functions to get race table as resultset
         try {//changes the result set, to the stack of raceDesctiptions
@@ -38,10 +57,14 @@ public class oglDescription {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+    }
+    private void getClassInfo() {
         //Class information
-        results = dataAccess.getAllClasses();
+        ResultSet results = dataAccess.getAllClasses();
         try {
+            ResultSetMetaData meta =  results.getMetaData();
+            Integer count = meta.getColumnCount();
+
             while (results.next()) {
                 PCClassDesc temp = new PCClassDesc();
 
@@ -62,9 +85,10 @@ public class oglDescription {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+    }
+    private void getBackGInfo() {
         //Background information
-        results = dataAccess.getAllBackgrounds();
+        ResultSet results = dataAccess.getAllBackgrounds();
         try {
             while (results.next()) {
                 PCBackGDesc temp = new PCBackGDesc();
@@ -83,8 +107,60 @@ public class oglDescription {
         }
     }
 
+    private Integer getClassCols() {
+        ResultSetMetaData results = dataAccess.getClassColumns();
+        int count = 1;
+        try {
+            while (true) {
+                assert results != null;
+                if (!(count < results.getColumnCount())) break;
+                classColsNames.add(results.getColumnName(count));
+                count++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return classColsNames.size();
+    }
+
+    private Integer getRaceCols() {
+        ResultSetMetaData results = dataAccess.getRaceColumns();
+        int count = 1;
+        try {
+            while (true) {
+                assert results != null;
+                if (!(count < results.getColumnCount())) break;
+                raceColsNames.add(results.getColumnName(count));
+                count++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return raceColsNames.size();
+    }
+
+    private Integer getBackGCols() {
+        ResultSetMetaData results = dataAccess.getBackGColumns();
+        Integer count = 1;
+        try {
+            while (true) {
+                assert results != null;
+                if (!(count < results.getColumnCount())) break;
+                backGColsNames.add(results.getColumnName(count));
+                count++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return backGColsNames.size();
+    }
+
     //Getters and setters
     public ArrayList<PCRaceDesc> getRaceDescs() {return raceDescs;}
     public ArrayList<PCClassDesc> getClassDescs() {return classDescs;}
     public ArrayList<PCBackGDesc> getBackGDescs() {return backGDescs;}
+
+    public ArrayList<String> getClassColsNames() {return classColsNames;}
+    public ArrayList<String> getRaceColsNames() {return raceColsNames;}
+    public ArrayList<String> getBackGColsNames() {return backGColsNames;}
 }

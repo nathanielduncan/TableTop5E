@@ -27,6 +27,24 @@ public class PCClassDesc {
         subclasses = null;
     }
 
+    public String getFrom(String from) {
+        switch (from) {
+            case "name": return getName();
+            case "hitDice": return getHitDice();
+            case "armor": return getArmor();
+            case "weapons": return getWeapons();
+            case "tools": return getTools();
+            case "savingThrows": return getSavingThrows();
+            case "skills": return getSkills();
+            case "equipment": return getEquipment();
+            case "features": return getFeatures();
+            case "asi": return getAsi();
+            case "subclasses": return getSubclasses();
+
+            default: return "FAILED";
+        }
+    }
+
 //Getters and setters
     public String getName() {
         return name;

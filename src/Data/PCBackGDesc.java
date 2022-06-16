@@ -17,7 +17,20 @@ public class PCBackGDesc {
         feature = null;
     }
 
-//Getters and Setters
+    public String getFrom(String from) {
+        switch (from) {
+            case "name": return getName();
+            case "description": return getDescription();
+            case "skills": return getSkills();
+            case "languages": return getLanguages();
+            case "equipment": return getEquipment();
+            case "feature": return getFeature();
+
+            default: return "FAILED";
+        }
+    }
+
+    //Getters and Setters
     public String getName() {
         return name;
     }

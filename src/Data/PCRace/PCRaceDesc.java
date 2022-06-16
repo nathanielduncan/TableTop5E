@@ -10,6 +10,22 @@ public class PCRaceDesc {
     String languageD = null;//This should be the DESCRIPTION of the races language. Language options are somewhere else
     String subraces = null;//This should be the names of the subraces, their descriptions should be somewhere else.
 
+    public String getFrom(String from) {
+        switch (from) {
+            case "name": return getName();
+            case "age": return getAgeD();
+            case "alignment": return getAlignmentD();
+            case "size": return getSizeD();
+            case "speed": return getSpeedD();
+            case "features": return getFeatures();
+            case "languages": return getLanguageD();
+            case "subraces": return getSubraces();
+
+            default: return "FAILED";
+        }
+    }
+
+
     //Get and Set functions for all^^^
     public String getName() {
         return name;
