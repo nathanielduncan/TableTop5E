@@ -1,5 +1,6 @@
 package Data;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class dataAccess {
@@ -92,5 +93,18 @@ public class dataAccess {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void putNewCharacter(String clas, String race, String background) {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/PCCharacters.db");
+            Statement stmt = conn.createStatement();
+            String sql = "INSERT INTO characters VALUES ('" + clas + "', '" + race + "', '" + background + "')";
+
+            stmt.executeUpdate(sql);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

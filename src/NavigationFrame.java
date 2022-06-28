@@ -34,11 +34,14 @@ public class NavigationFrame extends JFrame {
         //Card1 card1 = new Card1();
         JPanel card1 = new JPanel();
         card1.add(new JLabel("Home Page"));
+        card1.add(new JLabel("Not implemented yet"));
 
-        CreateCharacterPage CCPage = new CreateCharacterPage();
+        //CreateCharacterPage CCPage = new CreateCharacterPage();
+        CharacterPage CCPage = new CharacterPage();
 
         JPanel card3 = new JPanel();
         card3.add(new JLabel("Play TableTop page"));
+        card3.add(new JLabel("Not implemented yet"));
 
         //Create the panel that contains the "cards"
         cardsPane = new JPanel(new CardLayout());

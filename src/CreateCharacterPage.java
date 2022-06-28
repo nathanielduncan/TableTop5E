@@ -5,8 +5,9 @@ import Data.PCRace.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
-public class CreateCharacterPage extends JPanel {
+public class CreateCharacterPage extends JFrame {
     //Tabbed Pane used as content pane
     JTabbedPane tabPane;
 
@@ -32,8 +33,11 @@ public class CreateCharacterPage extends JPanel {
     private final ArrayList<JLabel> backGLabels = new ArrayList<>();
 
     public CreateCharacterPage() {
+        JPanel pane = new JPanel();
+        this.add(pane);
+
         tabPane = new JTabbedPane();
-        this.add(tabPane);//Adds TabbedPane to content panel
+        pane.add(tabPane);//Adds TabbedPane to content panel
 
         createTabs();//Make tabs and all content inside them
 
@@ -41,6 +45,10 @@ public class CreateCharacterPage extends JPanel {
         tabPane.add("Race", panelRace);
         tabPane.add("Background", panelBackG);
 
+        //Make a submit button for all tabs content
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(e -> submitButtonClicked());
+        pane.add(submit);
     }
 
     private void createTabs() {
@@ -197,6 +205,19 @@ public class CreateCharacterPage extends JPanel {
         }
     }
 
+    private void submitButtonClicked() {
+        String clas = getSelectedRadio(buttonGroupClass);
+        String race = getSelectedRadio(buttonGroupRace);
+        String background = getSelectedRadio(buttonGroupBackG);
+
+        if (clas != null && race != null && background != null) { //TODO: catch error better with a warning in the UI
+            dataAccess.putNewCharacter(clas, race, background);
+        }
+        else {
+            System.out.println("Not all 3 items have a selection.");
+        }
+    }
+
     private void makeClassLabels(ArrayList<String> columns) {
             //Defines all labels for the class page, and puts them in an array for use later
             for (String column: columns) {//For each category that needs a label
@@ -225,6 +246,18 @@ public class CreateCharacterPage extends JPanel {
             panelBackGLabels.add(tempLabel);//Add it to the panel
             panelBackGLabels.add(Box.createRigidArea(new Dimension(0,35)));//Add a space to keep them from touching
         }
+    }
+
+    private String getSelectedRadio (ButtonGroup group) {
+        for(Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+
+        return null;
     }
 
 }
