@@ -1,15 +1,17 @@
-import Data.*;
-import Data.PCClass.*;
-import Data.PCRace.*;
+import Data.PCBackGDesc;
+import Data.PCClass.PCClassDesc;
+import Data.PCRace.PCRaceDesc;
+import Data.dataAccess;
+import Data.oglDescription;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-public class CreateCharacterPage extends JFrame {
+public class RCBPage extends JPanel {
     //Tabbed Pane used as content pane
-    JTabbedPane tabPane;
+    JTabbedPane tabPane = new JTabbedPane();
 
     //Race page
     private JPanel panelRace;
@@ -32,23 +34,14 @@ public class CreateCharacterPage extends JFrame {
     private JPanel panelBackGLabels;
     private final ArrayList<JLabel> backGLabels = new ArrayList<>();
 
-    public CreateCharacterPage() {
-        JPanel pane = new JPanel();
-        this.add(pane);
-
-        tabPane = new JTabbedPane();
-        pane.add(tabPane);//Adds TabbedPane to content panel
+    public RCBPage() {
+        this.add(tabPane);//Adds TabbedPane to content panel
 
         createTabs();//Make tabs and all content inside them
 
         tabPane.add("Class", panelClass);//Add the created panels to the tabs
         tabPane.add("Race", panelRace);
         tabPane.add("Background", panelBackG);
-
-        //Make a submit button for all tabs content
-        JButton submit = new JButton("Submit");
-        submit.addActionListener(e -> submitButtonClicked());
-        pane.add(submit);
     }
 
     private void createTabs() {
@@ -108,7 +101,6 @@ public class CreateCharacterPage extends JFrame {
         panelBackG.add(Box.createRigidArea(new Dimension(35, 0)));//With a space between to widen the window
         panelBackG.add(panelBackGLabels);
     }
-
     private void makeRaceButtons(ArrayList<PCRaceDesc> races, ArrayList<String> colNames) {
         for (PCRaceDesc PCRace : races) {//Creates a button for every race listed in the DB
             JRadioButton button = new JRadioButton();
@@ -166,9 +158,6 @@ public class CreateCharacterPage extends JFrame {
             panelClassButtons.add(Box.createRigidArea(new Dimension(0,50)));
         }
     }
-
-
-
     private void raceButtonClicked(PCRaceDesc raceDesc, ArrayList<String> colNames) {//When creating action
         int width = 250;//For wrapping the description tests
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
@@ -179,6 +168,9 @@ public class CreateCharacterPage extends JFrame {
                     colNames.get(colCount) + ": " + raceDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
             colCount++;
         }
+
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(tabPane);
+        frame.pack();
     }
 
     private void classButtonClicked(PCClassDesc classDesc, ArrayList<String> colNames) {
@@ -191,6 +183,9 @@ public class CreateCharacterPage extends JFrame {
                     colNames.get(colCount) + ": " + classDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
             colCount++;
         }
+
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(tabPane);
+        frame.pack();
     }
 
     private void backGButtonClicked(PCBackGDesc backGDesc, ArrayList<String> colNames) {
@@ -203,24 +198,14 @@ public class CreateCharacterPage extends JFrame {
                     colNames.get(colCount) + ": " + backGDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
             colCount++;
         }
-    }
 
-    private void submitButtonClicked() {
-        String clas = getSelectedRadio(buttonGroupClass);
-        String race = getSelectedRadio(buttonGroupRace);
-        String background = getSelectedRadio(buttonGroupBackG);
-
-        if (clas != null && race != null && background != null) { //TODO: catch error better with a warning in the UI
-            dataAccess.putNewCharacter(clas, race, background);
-        }
-        else {
-            System.out.println("Not all 3 items have a selection.");
-        }
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(tabPane);
+        frame.pack();
     }
 
     private void makeClassLabels(ArrayList<String> columns) {
-            //Defines all labels for the class page, and puts them in an array for use later
-            for (String column: columns) {//For each category that needs a label
+        //Defines all labels for the class page, and puts them in an array for use later
+        for (String column: columns) {//For each category that needs a label
             JLabel tempLabel = new JLabel("" + column);//Make a new label
             classLabels.add(tempLabel);//Add it to the labelArray
             panelClassLabels.add(tempLabel);//Add it to the panel
@@ -248,16 +233,17 @@ public class CreateCharacterPage extends JFrame {
         }
     }
 
-    private String getSelectedRadio (ButtonGroup group) {
-        for(Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
-            AbstractButton button = buttons.nextElement();
+    //Getters and Setters
 
-            if (button.isSelected()) {
-                return button.getText();
-            }
-        }
-
-        return null;
+    public ButtonGroup getButtonGroupRace() {
+        return buttonGroupRace;
     }
 
+    public ButtonGroup getButtonGroupClass() {
+        return buttonGroupClass;
+    }
+
+    public ButtonGroup getButtonGroupBackG() {
+        return buttonGroupBackG;
+    }
 }

@@ -13,7 +13,7 @@ public class CharacterPage extends JPanel {
     }
 
     private void makeButtonClicked() {
-        CreateCharacterPage CCPage = new CreateCharacterPage();//Extends JFrame, makes a new window
+        CreateCharacterWindow CCPage = new CreateCharacterWindow();//Extends JFrame, makes a new window
         CCPage.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//Doesn't end the program on close, just the windows gets disposed
 
         CCPage.pack();//Sets the window size to fit all components
