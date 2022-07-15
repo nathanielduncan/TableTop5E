@@ -1,3 +1,5 @@
+import Data.CharacterAttributes;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,63 +12,60 @@ public class StatPage extends JPanel {
         this.add(contentPane);
 
         scoresPane.setLayout(new BoxLayout(scoresPane, BoxLayout.Y_AXIS));//Buttons and labels panels added horizontally
+        scoresPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         makeScoresPane();
         contentPane.add(scoresPane);
 
         rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));//Buttons and labels panels added horizontally
+        rightPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         makeRightPane();//Puts other panels inside this one for three things listed above ^
         contentPane.add(rightPane);
 
     }
 
     private void makeScoresPane() {
-        scoresPane.add(new JLabel("Strength score"));
-        scoresPane.add(new JLabel("Dexterity score"));
-        scoresPane.add(new JLabel("Constitution score"));
-        scoresPane.add(new JLabel("Intelligence score"));
-        scoresPane.add(new JLabel("Wisdom score"));
-        scoresPane.add(new JLabel("Charisma score"));
+        for (CharacterAttributes.AbilityScores score : CharacterAttributes.AbilityScores.values()) {
+            JLabel temp = new JLabel(String.valueOf(score));
+            temp.setAlignmentX(0.5f);
+
+            scoresPane.add(temp);
+        }
     }
 
     private void makeRightPane() {//Makes panes for proficiency bonus,saving throws, and skills
+        //Proficiency bonus box
         JPanel profBonusPane = new JPanel();
+        profBonusPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         profBonusPane.add(new JLabel("Proficiency Bonus"));
         rightPane.add(profBonusPane);
 
-        rightPane.add(Box.createRigidArea(new Dimension(0,50)));
+        rightPane.add(Box.createRigidArea(new Dimension(0,50)));//Add a space
 
+        //Saving throws box
         JPanel savingThrowsPane = new JPanel();
         savingThrowsPane.setLayout(new BoxLayout(savingThrowsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added horizontally
-        savingThrowsPane.add(new JLabel("Strength"));
-        savingThrowsPane.add(new JLabel("Dexterity"));
-        savingThrowsPane.add(new JLabel("Constitution"));
-        savingThrowsPane.add(new JLabel("Intelligence"));
-        savingThrowsPane.add(new JLabel("Wisdom"));
-        savingThrowsPane.add(new JLabel("Charisma"));
+        savingThrowsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        for (CharacterAttributes.AbilityScores score : CharacterAttributes.AbilityScores.values()) {
+            JLabel temp = new JLabel(String.valueOf(score));
+            temp.setAlignmentX(0.5f);
+
+            savingThrowsPane.add(temp);
+        }
         rightPane.add(savingThrowsPane);
 
-        rightPane.add(Box.createRigidArea(new Dimension(0,50)));
+        rightPane.add(Box.createRigidArea(new Dimension(0,50)));//Add a space
 
+        //Skills box
         JPanel skillsPane = new JPanel();
         skillsPane.setLayout(new BoxLayout(skillsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added horizontally
-        skillsPane.add(new JLabel("Acrobatics"));
-        skillsPane.add(new JLabel("Animal Handling"));
-        skillsPane.add(new JLabel("Arcana"));
-        skillsPane.add(new JLabel("Athletics"));
-        skillsPane.add(new JLabel("Deception"));
-        skillsPane.add(new JLabel("History"));
-        skillsPane.add(new JLabel("Insight"));
-        skillsPane.add(new JLabel("Intimidation"));
-        skillsPane.add(new JLabel("Investigation"));
-        skillsPane.add(new JLabel("Medicine"));
-        skillsPane.add(new JLabel("Nature"));
-        skillsPane.add(new JLabel("Perception"));
-        skillsPane.add(new JLabel("Performance"));
-        skillsPane.add(new JLabel("Persuasion"));
-        skillsPane.add(new JLabel("Religion"));
-        skillsPane.add(new JLabel("Sleight of Hand"));
-        skillsPane.add(new JLabel("Stealth"));
-        skillsPane.add(new JLabel("Survival"));
+        skillsPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        for (CharacterAttributes.Skills skill : CharacterAttributes.Skills.values()) {
+            JLabel temp = new JLabel(String.valueOf(skill));
+            temp.setAlignmentX(0.5f);
+
+            skillsPane.add(temp);
+        }
         rightPane.add(skillsPane);
 
 
