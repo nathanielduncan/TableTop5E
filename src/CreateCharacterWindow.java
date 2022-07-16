@@ -40,7 +40,8 @@ public class CreateCharacterWindow extends JFrame {
         pagePane.removeAll();
         pagePane.add(rcb);
         pagePane.revalidate();
-        pagePane.repaint();
+        pagePane.repaint();//Show new page
+        pack();//resize window to fit
 
         buttonPane.getComponent(0).setEnabled(false);
         buttonPane.getComponent(1).setEnabled(true);
@@ -50,19 +51,21 @@ public class CreateCharacterWindow extends JFrame {
         pagePane.removeAll();
         pagePane.add(sp);
         pagePane.revalidate();
-        pagePane.repaint();
+        pagePane.repaint();//Show new page
+        pack();//resize window to fit
 
         buttonPane.getComponent(1).setEnabled(false);
         buttonPane.getComponent(0).setEnabled(true);
     }
 
     private void submitButtonClicked() {//Writes to the DB when creation is done
-        String clas = getSelectedRadio(rcb.getButtonGroupClass());
-        String race = getSelectedRadio(rcb.getButtonGroupRace());
-        String background = getSelectedRadio(rcb.getButtonGroupBackG());
+        PlayerCharacter pc = new PlayerCharacter();
+        pc.setClas(getSelectedRadio(rcb.getButtonGroupClass()));
+        pc.setRace(getSelectedRadio(rcb.getButtonGroupRace()));
+        pc.setBackground(getSelectedRadio(rcb.getButtonGroupBackG()));
 
-        if (clas != null && race != null && background != null) { //TODO: catch error better with a warning in the UI
-            dataAccess.putNewCharacter(clas, race, background);
+        if (pc.getClas() != null && pc.getRace() != null && pc.getBackground() != null) { //TODO: catch error better with a warning in the UI
+            dataAccess.putNewCharacter(pc);
         }
         else {
             System.out.println("Not all 3 items have a selection.");

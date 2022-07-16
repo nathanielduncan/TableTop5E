@@ -8,28 +8,24 @@ public class StatPage extends JPanel {
     JPanel rightPane = new JPanel();//Holds proficiency bonus,saving throws, and skills <
 
     public StatPage() {
-        JPanel contentPane = new JPanel();//One pane to rule them all
-        this.add(contentPane);
-
-        scoresPane.setLayout(new BoxLayout(scoresPane, BoxLayout.Y_AXIS));//Buttons and labels panels added horizontally
-        scoresPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        scoresPane.setLayout(new BoxLayout(scoresPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
         makeScoresPane();
-        contentPane.add(scoresPane);
+        this.add(scoresPane);
 
-        rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));//Buttons and labels panels added horizontally
+        rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
         rightPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         makeRightPane();//Puts other panels inside this one for three things listed above ^
-        contentPane.add(rightPane);
-
+        this.add(rightPane);
     }
 
     private void makeScoresPane() {
         for (CharacterAttributes.AbilityScores score : CharacterAttributes.AbilityScores.values()) {
-            JLabel temp = new JLabel(String.valueOf(score));
-            temp.setAlignmentX(0.5f);
+            AbilityScoreBox temp = new AbilityScoreBox(String.valueOf(score));
 
             scoresPane.add(temp);
         }
+
+        scoresPane.add(new JLabel("Hit enter to get modifier"));
     }
 
     private void makeRightPane() {//Makes panes for proficiency bonus,saving throws, and skills

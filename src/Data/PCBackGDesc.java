@@ -1,5 +1,10 @@
 package Data;
 
+/*
+This class is used by OGLDescription to store data about each Player Background.
+This data is filled using dataAccess, that uses SQL to reach the database ogl.db
+*/
+
 public class PCBackGDesc {
     String name = null;
     String description = null;
@@ -18,6 +23,7 @@ public class PCBackGDesc {
     }
 
     public String getFrom(String from) {
+        //One function to run all the other get functions, so it can be looped over if given all the names
         switch (from) {
             case "name": return getName();
             case "description": return getDescription();

@@ -1,5 +1,10 @@
 package Data.PCRace;
 
+/*
+This class is used by OGLDescription to store data about each Player Race.
+This data is filled using dataAccess, that uses SQL to reach the database ogl.db
+*/
+
 public class PCRaceDesc {
     String name = null;
     String ageD = null;
@@ -11,6 +16,7 @@ public class PCRaceDesc {
     String subraces = null;//This should be the names of the subraces, their descriptions should be somewhere else.
 
     public String getFrom(String from) {
+        //One function to run all the other get functions, so it can be looped over if given all the names
         switch (from) {
             case "name": return getName();
             case "age": return getAgeD();

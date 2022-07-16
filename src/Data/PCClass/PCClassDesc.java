@@ -1,5 +1,10 @@
 package Data.PCClass;
 
+/*
+This class is used by OGLDescription to store data about each Player Class.
+This data is filled using dataAccess, that uses SQL to reach the database ogl.db
+*/
+
 public class PCClassDesc {
     String name = null;
     String hitDice = null;
@@ -28,6 +33,7 @@ public class PCClassDesc {
     }
 
     public String getFrom(String from) {
+        //One function to run all the other get functions, so it can be looped over if given all the names
         switch (from) {
             case "name": return getName();
             case "hitDice": return getHitDice();

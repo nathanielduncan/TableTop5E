@@ -95,11 +95,11 @@ public class dataAccess {
         return null;
     }
 
-    public static void putNewCharacter(String clas, String race, String background) {
+    public static void putNewCharacter(PlayerCharacter pc) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/PCCharacters.db");
             Statement stmt = conn.createStatement();
-            String sql = "INSERT INTO characters VALUES ('" + clas + "', '" + race + "', '" + background + "')";
+            String sql = "INSERT INTO characters VALUES ('" + pc.getClas() + "', '" + pc.getRace() + "', '" + pc.getBackground() + "')";
 
             stmt.executeUpdate(sql);
 
