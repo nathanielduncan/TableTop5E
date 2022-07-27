@@ -30,9 +30,9 @@ public class AbilityScoreBox extends JPanel {
 
     private void scoreEntered() {
         try {
-            int scor = Integer.parseInt(score.getText());
-            if (scor >= 1 && scor <= 30) {//Must be between 1 and 30
-                modifier.setText(String.valueOf(getMod(scor)));
+            int score = Integer.parseInt(this.score.getText());
+            if (score >= 1 && score <= 30) {//Must be between 1 and 30
+                modifier.setText(String.valueOf(getMod(score)));
             } else {
                 System.out.println("Please enter a number between 1 and 30.");          //TODO make error show in UI
             }

@@ -18,37 +18,22 @@ public class PCClassDesc {
     String asi = null;
     String subclasses = null;
 
-    public void clear() {//When selection is cleared in GUI, saved object loses all data
-        name = null;
-        hitDice = null;
-        armor = null;
-        weapons = null;
-        tools = null;
-        savingThrows = null;
-        skills = null;
-        equipment = null;
-        features = null;
-        asi = null;
-        subclasses = null;
-    }
-
     public String getFrom(String from) {
         //One function to run all the other get functions, so it can be looped over if given all the names
-        switch (from) {
-            case "name": return getName();
-            case "hitDice": return getHitDice();
-            case "armor": return getArmor();
-            case "weapons": return getWeapons();
-            case "tools": return getTools();
-            case "savingThrows": return getSavingThrows();
-            case "skills": return getSkills();
-            case "equipment": return getEquipment();
-            case "features": return getFeatures();
-            case "asi": return getAsi();
-            case "subclasses": return getSubclasses();
-
-            default: return "FAILED";
-        }
+        return switch (from) {
+            case "name" -> getName();
+            case "hitDice" -> getHitDice();
+            case "armor" -> getArmor();
+            case "weapons" -> getWeapons();
+            case "tools" -> getTools();
+            case "savingThrows" -> getSavingThrows();
+            case "skills" -> getSkills();
+            case "equipment" -> getEquipment();
+            case "features" -> getFeatures();
+            case "asi" -> getAsi();
+            case "subclasses" -> getSubclasses();
+            default -> "FAILED";
+        };
     }
 
 //Getters and setters

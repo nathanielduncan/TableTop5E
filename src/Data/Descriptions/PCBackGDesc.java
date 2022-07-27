@@ -13,27 +13,17 @@ public class PCBackGDesc {
     String equipment = null;
     String feature = null;
 
-    public void clear() {
-        name = null;
-        description = null;
-        skills = null;
-        languages = null;
-        equipment = null;
-        feature = null;
-    }
-
     public String getFrom(String from) {
         //One function to run all the other get functions, so it can be looped over if given all the names
-        switch (from) {
-            case "name": return getName();
-            case "description": return getDescription();
-            case "skills": return getSkills();
-            case "languages": return getLanguages();
-            case "equipment": return getEquipment();
-            case "feature": return getFeature();
-
-            default: return "FAILED";
-        }
+        return switch (from) {
+            case "name" -> getName();
+            case "description" -> getDescription();
+            case "skills" -> getSkills();
+            case "languages" -> getLanguages();
+            case "equipment" -> getEquipment();
+            case "feature" -> getFeature();
+            default -> "FAILED";
+        };
     }
 
     //Getters and Setters

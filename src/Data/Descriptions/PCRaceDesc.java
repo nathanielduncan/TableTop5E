@@ -12,23 +12,22 @@ public class PCRaceDesc {
     String sizeD = null;
     String speedD = null;
     String features = null;//This should be the names of the features it has, their descriptions should be somewhere else.
-    String languageD = null;//This should be the DESCRIPTION of the races language. Language options are somewhere else
+    String languageD = null;//This should be the DESCRIPTION of the race's language. Language options are somewhere else
     String subraces = null;//This should be the names of the subraces, their descriptions should be somewhere else.
 
     public String getFrom(String from) {
         //One function to run all the other get functions, so it can be looped over if given all the names
-        switch (from) {
-            case "name": return getName();
-            case "age": return getAgeD();
-            case "alignment": return getAlignmentD();
-            case "size": return getSizeD();
-            case "speed": return getSpeedD();
-            case "features": return getFeatures();
-            case "languages": return getLanguageD();
-            case "subraces": return getSubraces();
-
-            default: return "FAILED";
-        }
+        return switch (from) {
+            case "name" -> getName();
+            case "age" -> getAgeD();
+            case "alignment" -> getAlignmentD();
+            case "size" -> getSizeD();
+            case "speed" -> getSpeedD();
+            case "features" -> getFeatures();
+            case "languages" -> getLanguageD();
+            case "subraces" -> getSubraces();
+            default -> "FAILED";
+        };
     }
 
 

@@ -39,10 +39,10 @@ public class oglDescription {
     }
     private void getRaceInfo() {
         //race information
-        ResultSet results = dataAccess.getAllRaces();//DataAccess functions to get race table as resultset
-        try {//changes the result set, to the stack of raceDesctiptions
-            while (results.next()) {
-                PCRaceDesc temp = new PCRaceDesc();//Put each column from data base, to a temp object
+        ResultSet results = dataAccess.getAllRaces();//DataAccess functions to get race table as resultSet
+        try {//changes the result set, to the stack of raceDescriptions
+            while (results != null && results.next()) {
+                PCRaceDesc temp = new PCRaceDesc();//Put each column from database, to a temp object
 
                 temp.setName(results.getString("name"));
                 temp.setAgeD(results.getString("age"));
@@ -63,10 +63,7 @@ public class oglDescription {
         //Class information
         ResultSet results = dataAccess.getAllClasses();
         try {
-            ResultSetMetaData meta =  results.getMetaData();
-            Integer count = meta.getColumnCount();
-
-            while (results.next()) {
+            while (results != null && results.next()) {
                 PCClassDesc temp = new PCClassDesc();
 
                 temp.setName(results.getString("name"));
@@ -91,7 +88,7 @@ public class oglDescription {
         //Background information
         ResultSet results = dataAccess.getAllBackgrounds();
         try {
-            while (results.next()) {
+            while (results != null && results.next()) {
                 PCBackGDesc temp = new PCBackGDesc();
 
                 temp.setName(results.getString("name"));
@@ -142,7 +139,7 @@ public class oglDescription {
 
     private Integer getBackGCols() {
         ResultSetMetaData results = dataAccess.getBackGColumns();
-        Integer count = 1;
+        int count = 1;
         try {
             while (true) {
                 assert results != null;

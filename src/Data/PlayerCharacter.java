@@ -20,7 +20,7 @@ public class PlayerCharacter {
 
     public boolean isCharFull() {
         return !Stream.of(clas, race, background, strength, dexterity, constitution, intelligence, wisdom, charisma)
-                .allMatch(Objects::isNull);
+                .allMatch(Objects::isNull);//If any member is null, this returns false
     }
 
     //Getters and Setters
@@ -35,27 +35,13 @@ public class PlayerCharacter {
     public void setScoreByName(String name, String score) {
         System.out.println("Setting " + name + " as " + score);
         switch (name) {
-            case "Strength":
-                setStrength(Integer.parseInt(score));
-                break;
-            case "Dexterity":
-                setDexterity(Integer.parseInt(score));
-                break;
-            case "Constitution":
-                setConstitution(Integer.parseInt(score));
-                break;
-            case "Intelligence":
-                setIntelligence(Integer.parseInt(score));
-                break;
-            case "Wisdom":
-                setWisdom(Integer.parseInt(score));
-                break;
-            case "Charisma":
-                setCharisma(Integer.parseInt(score));
-                break;
-            default:
-                System.out.println("No setter function called");
-                break;
+            case "Strength" -> setStrength(Integer.parseInt(score));
+            case "Dexterity" -> setDexterity(Integer.parseInt(score));
+            case "Constitution" -> setConstitution(Integer.parseInt(score));
+            case "Intelligence" -> setIntelligence(Integer.parseInt(score));
+            case "Wisdom" -> setWisdom(Integer.parseInt(score));
+            case "Charisma" -> setCharisma(Integer.parseInt(score));
+            default -> System.out.println("No setter function called");
         }
     }
 
