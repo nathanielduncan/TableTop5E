@@ -1,7 +1,8 @@
 package Data;
 
-import Data.PCClass.PCClassDesc;
-import Data.PCRace.PCRaceDesc;
+import Data.Descriptions.PCBackGDesc;
+import Data.Descriptions.PCClassDesc;
+import Data.Descriptions.PCRaceDesc;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

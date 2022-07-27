@@ -1,5 +1,8 @@
 package Data;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 public class PlayerCharacter {
     String clas;
     String race;
@@ -11,6 +14,74 @@ public class PlayerCharacter {
     int intelligence;
     int wisdom;
     int charisma;
+
+    public PlayerCharacter() {
+    }
+
+    public boolean isCharFull() {
+        return !Stream.of(clas, race, background, strength, dexterity, constitution, intelligence, wisdom, charisma)
+                .allMatch(Objects::isNull);
+    }
+
+    //Getters and Setters
+    public void setRCBByName(String group, String name) {
+        switch (group) {//Set the found button text to the correct character attribute
+            case "Class" -> this.setClas(name);
+            case "Race" -> this.setRace(name);
+            case "Background" -> this.setBackground(name);
+        }
+    }
+
+    public void setScoreByName(String name, String score) {
+        System.out.println("Setting " + name + " as " + score);
+        switch (name) {
+            case "Strength":
+                setStrength(Integer.parseInt(score));
+                break;
+            case "Dexterity":
+                setDexterity(Integer.parseInt(score));
+                break;
+            case "Constitution":
+                setConstitution(Integer.parseInt(score));
+                break;
+            case "Intelligence":
+                setIntelligence(Integer.parseInt(score));
+                break;
+            case "Wisdom":
+                setWisdom(Integer.parseInt(score));
+                break;
+            case "Charisma":
+                setCharisma(Integer.parseInt(score));
+                break;
+            default:
+                System.out.println("No setter function called");
+                break;
+        }
+    }
+
+    public String getClas() {
+        return clas;
+    }
+
+    public void setClas(String clas) {
+        this.clas = clas;
+    }
+
+    public String getRace() {
+        return race;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
+    }
 
     public int getStrength() {
         return strength;
@@ -58,33 +129,5 @@ public class PlayerCharacter {
 
     public void setCharisma(int charisma) {
         this.charisma = charisma;
-    }
-
-    public PlayerCharacter() {
-    }
-
-    //Getters and Setters
-    public String getClas() {
-        return clas;
-    }
-
-    public void setClas(String clas) {
-        this.clas = clas;
-    }
-
-    public String getRace() {
-        return race;
-    }
-
-    public void setRace(String race) {
-        this.race = race;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public void setBackground(String background) {
-        this.background = background;
     }
 }

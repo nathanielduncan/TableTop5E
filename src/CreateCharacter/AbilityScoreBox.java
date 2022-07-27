@@ -1,3 +1,5 @@
+package CreateCharacter;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,7 +19,7 @@ public class AbilityScoreBox extends JPanel {
         score = new JTextField();//Add textField for label
         score.setAlignmentX(0.5F);//Item aligns center
         score.setHorizontalAlignment(JTextField.CENTER);
-        score.addActionListener(e -> scoreEntered());
+        score.addActionListener(e -> scoreEntered());//One of two action functions for when a score is entered. This one fills in the modifier for this box
         this.add(score);
 
         modifier = new JLabel("-");//Add Label for modifier
@@ -46,5 +48,12 @@ public class AbilityScoreBox extends JPanel {
         } else { //zero or higher
             return mod / 2;
         }
+    }
+
+    public String getTitle() {
+        return title.getText();
+    }
+    public JTextField getScore() {
+        return score;
     }
 }

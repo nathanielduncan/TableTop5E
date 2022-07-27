@@ -1,4 +1,4 @@
-package Data.PCRace;
+package Data.Descriptions;
 
 /*
 This class is used by OGLDescription to store data about each Player Race.

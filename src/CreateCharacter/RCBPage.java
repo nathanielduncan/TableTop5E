@@ -1,13 +1,13 @@
-import Data.PCBackGDesc;
-import Data.PCClass.PCClassDesc;
-import Data.PCRace.PCRaceDesc;
-import Data.dataAccess;
+package CreateCharacter;
+
+import Data.Descriptions.PCBackGDesc;
+import Data.Descriptions.PCClassDesc;
+import Data.Descriptions.PCRaceDesc;
 import Data.oglDescription;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 public class RCBPage extends JPanel {
     //Tabbed Pane used as content pane

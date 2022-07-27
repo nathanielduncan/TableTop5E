@@ -1,6 +1,5 @@
 package Data;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class dataAccess {
@@ -11,9 +10,7 @@ public class dataAccess {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
 
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM races;");
-
-            return rs;
+            return stmt.executeQuery("SELECT * FROM races;");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -26,9 +23,7 @@ public class dataAccess {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
 
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM classes;");
-
-            return rs;
+            return stmt.executeQuery("SELECT * FROM classes;");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,9 +36,8 @@ public class dataAccess {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
 
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM backgrounds;");
+            return stmt.executeQuery("SELECT * FROM backgrounds;");
 
-            return rs;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,9 +50,8 @@ public class dataAccess {
             Statement stmt = conn.createStatement();
 
             ResultSet results = stmt.executeQuery("SELECT * FROM classes");
-            ResultSetMetaData metaData = results.getMetaData();
+            return results.getMetaData();
 
-            return metaData;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -71,9 +64,8 @@ public class dataAccess {
             Statement stmt = conn.createStatement();
 
             ResultSet results = stmt.executeQuery("SELECT * FROM races");
-            ResultSetMetaData metaData = results.getMetaData();
+            return results.getMetaData();
 
-            return metaData;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,9 +78,8 @@ public class dataAccess {
             Statement stmt = conn.createStatement();
 
             ResultSet results = stmt.executeQuery("SELECT * FROM backgrounds");
-            ResultSetMetaData metaData = results.getMetaData();
+            return results.getMetaData();
 
-            return metaData;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,7 +90,8 @@ public class dataAccess {
         try {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/PCCharacters.db");
             Statement stmt = conn.createStatement();
-            String sql = "INSERT INTO characters VALUES ('" + pc.getClas() + "', '" + pc.getRace() + "', '" + pc.getBackground() + "')";
+            String sql = "INSERT INTO characters VALUES ('" + pc.getClas() + "', '" + pc.getRace() + "', '" + pc.getBackground() + "', '" +
+            pc.getStrength() + "', '" + pc.getDexterity() + "', '" + pc.getConstitution() + "', '" + pc.getIntelligence() + "', '" + pc.getWisdom() + "', '" + pc.getCharisma() + "')";
 
             stmt.executeUpdate(sql);
 

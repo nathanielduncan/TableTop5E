@@ -1,3 +1,5 @@
+package CreateCharacter;
+
 import javax.swing.border.Border;
 import java.awt.*;
 /*
