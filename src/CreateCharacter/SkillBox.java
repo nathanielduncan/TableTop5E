@@ -9,8 +9,10 @@ public class SkillBox extends JPanel {
     JLabel scoreBox;
     JRadioButton prof;
     JLabel title;
+    Skill containedSkill;
 
     public SkillBox(Skill skill) {
+        containedSkill = skill;
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));//Items added from top to bottom
 
         //Add radio button
@@ -48,6 +50,8 @@ public class SkillBox extends JPanel {
         this.add(title);
 
         this.add(Box.createHorizontalGlue());//Glue here on the right side makes sure all extra space is added to the end of the box
-
     }
+
+    public Skill getContainedSkill() {return containedSkill;}
+    public void setScoreBox(String score) {this.scoreBox.setText(score);}
 }

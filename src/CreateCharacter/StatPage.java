@@ -7,6 +7,7 @@ import Data.dataAccess;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class StatPage extends JPanel {
@@ -28,7 +29,8 @@ public class StatPage extends JPanel {
         ArrayList<AbilityScore> abilityScores = dataAccess.getScores();
         assert abilityScores != null : "No ability scores were found in the database, when making the scoresPane on the StatPage";
         for (AbilityScore score : abilityScores) {
-            AbilityScoreBox temp = new AbilityScoreBox(score.getAbility());
+            AbilityScoreBox temp = new AbilityScoreBox(score);
+            makeAbilityScoreAction(temp);
 
             scoresPane.add(temp);
             scoresPane.add(Box.createVerticalGlue());//Add glue between each box, so that extra space moves them away from each other
@@ -66,11 +68,49 @@ public class StatPage extends JPanel {
         assert skills != null : "No skills were found in the database while making the skillsBox on the StatPage";
         for (Skill skill : skills) {//for each skill from the database
             SkillBox temp = new SkillBox(skill);//make a skill box
-
-            skillsPane.add(temp);
+            skillsPane.add(temp);//Add it to the Pane
         }
         rightPane.add(skillsPane);
     }
+
+    private void makeAbilityScoreAction(AbilityScoreBox abilityScoreBox) {//Brings in an ability score box
+        JTextField scoreField = abilityScoreBox.getScore();//Gets the JTextField from the scoreBox
+        scoreField.addActionListener(e -> fillSkills(abilityScoreBox));//Adds a listener to the textField, to fill in all the scores
+    }
+
+    private void fillSkills(AbilityScoreBox abilityScoreBox) {//is called when an ability score is entered
+        //Calculate and get modifier
+        try {
+            int score = Integer.parseInt(abilityScoreBox.getScore().getText());//Gets the entered score from the box
+            if (score >= 1 && score <= 30) {//Must be between 1 and 30
+                abilityScoreBox.getModifier().setText(String.valueOf(getMod(score)));//Modifier is calculated in getMod function
+            } else {
+                System.out.println("Please enter a number between 1 and 30.");          //TODO make error show in UI
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a number between 1 and 30.");               //TODO make error show in UI
+        }
+
+        //Fills corresponding skills
+        Component[] components = skillsPane.getComponents();//Gets all components in the skillsPane
+        for (Component component : components) {//For all the components
+            if (component instanceof SkillBox skillBox) {//If it is a skill box
+                if (Objects.equals(skillBox.getContainedSkill().getAbility(), abilityScoreBox.getContainedAbility().getAbility())) {//If the skill corresponds to the ability score that was entered
+                    skillBox.setScoreBox(abilityScoreBox.getModifier().getText());//Set the skill bonus as the calculated modifier from the ability score
+                }
+            }
+        }
+    }
+
+    private int getMod(int score) {//calculates the modifier for the given ability score
+        int mod = score - 10;
+        if (mod < 0) {//Accounts for rounding with negative numbers
+            return (mod - 1) / 2;
+        } else { //zero or higher
+            return mod / 2;
+        }
+    }
+
 
     //getters and setters
     public Component[] getScoreBoxes() {//Returns all the components inside the scoresPane, should only be 6 scoreBoxes
