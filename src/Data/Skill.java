@@ -2,10 +2,15 @@ package Data;
 
 public class Skill extends AbilityScore{
     boolean proficient;
-    String skill;
+    String title;
+    int bonus;
 
-    public Skill(String score, String skill) {
-        super(score);
-        this.skill = skill;
+    public Skill(String skill, String ability) {
+        super(ability);
+        title = skill;
+    }
+
+    public String getSkill() {
+        return title;
     }
 }

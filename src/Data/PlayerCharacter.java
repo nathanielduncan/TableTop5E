@@ -8,14 +8,20 @@ public class PlayerCharacter {
     String race;
     String background;
 
-    int strength;
-    int dexterity;
-    int constitution;
-    int intelligence;
-    int wisdom;
-    int charisma;
+    AbilityScore strength;
+    AbilityScore dexterity;
+    AbilityScore constitution;
+    AbilityScore intelligence;
+    AbilityScore wisdom;
+    AbilityScore charisma;
 
     public PlayerCharacter() {
+        strength = new AbilityScore("Strength");
+        dexterity = new AbilityScore("Dexterity");
+        constitution = new AbilityScore("Constitution");
+        intelligence = new AbilityScore("Intelligence");
+        wisdom = new AbilityScore("Wisdom");
+        charisma = new AbilityScore("Charisma");
     }
 
     public boolean isCharFull() {
@@ -70,50 +76,46 @@ public class PlayerCharacter {
     }
 
     public int getStrength() {
-        return strength;
+        return strength.getScore();
     }
 
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
+    public void setStrength(int strength) {this.strength.setScore(strength);}
 
     public int getDexterity() {
-        return dexterity;
+        return dexterity.getScore();
     }
 
     public void setDexterity(int dexterity) {
-        this.dexterity = dexterity;
+        this.dexterity.setScore(dexterity);
     }
 
     public int getConstitution() {
-        return constitution;
+        return constitution.getScore();
     }
 
     public void setConstitution(int constitution) {
-        this.constitution = constitution;
+        this.constitution.setScore(constitution);
     }
 
     public int getIntelligence() {
-        return intelligence;
+        return intelligence.getScore();
     }
 
-    public void setIntelligence(int intelligence) {
-        this.intelligence = intelligence;
-    }
+    public void setIntelligence(int intelligence) {this.intelligence.setScore(intelligence);}
 
     public int getWisdom() {
-        return wisdom;
+        return wisdom.getScore();
     }
 
     public void setWisdom(int wisdom) {
-        this.wisdom = wisdom;
+        this.wisdom.setScore(wisdom);
     }
 
     public int getCharisma() {
-        return charisma;
+        return charisma.getScore();
     }
 
     public void setCharisma(int charisma) {
-        this.charisma = charisma;
+        this.charisma.setScore(charisma);
     }
 }

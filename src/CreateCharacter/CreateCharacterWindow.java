@@ -87,7 +87,7 @@ public class CreateCharacterWindow extends JFrame {
         for (Component temp : skillBoxes) {
             if (temp instanceof AbilityScoreBox box) {//If item can't be cast as CreateCharacter.AbilityScoreBox (Glue and spacer items) it is skipped
                 JTextField score = box.getScore();//Get the score box
-                score.addActionListener(e -> character.setScoreByName(box.getTitle(), score.getText()));//Call the function using the score from the box and the title of it from the label
+                score.addActionListener(e -> character.setScoreByName(box.getTitle(), score.getText()));//Call this function when a score is entered, using the score from the box and the title of it from the label
             }
         }
     }

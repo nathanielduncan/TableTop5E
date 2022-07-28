@@ -1,9 +1,12 @@
 package CreateCharacter;
 
 import Data.CharacterAttributes;
+import Data.Skill;
+import Data.dataAccess;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class StatPage extends JPanel {
     JPanel scoresPane = new JPanel();//Panel on the left will hold ability scores and modifiers
@@ -24,7 +27,7 @@ public class StatPage extends JPanel {
         for (CharacterAttributes.AbilityScores score : CharacterAttributes.AbilityScores.values()) {
             AbilityScoreBox temp = new AbilityScoreBox(score.toString());
 
-            temp.score.addActionListener(e -> scoreAdded());//One of two action functions for when a score is entered. This one fills in skill information.
+            temp.score.addActionListener(e -> fillSkills());//When a score is entered, it fills all the corresponding skills
 
             scoresPane.add(temp);
             scoresPane.add(Box.createVerticalGlue());//Add glue between each box, so that extra space moves them away from each other
@@ -56,23 +59,38 @@ public class StatPage extends JPanel {
         skillsPane = new JPanel();//Defined outside function so it can be used elsewhere
         skillsPane.setLayout(new BoxLayout(skillsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
         skillsPane.setBorder(new ArcCornerBorder());
-        for (CharacterAttributes.AllSkills skill : CharacterAttributes.AllSkills.values()) {
-            SkillBox temp = new SkillBox(String.valueOf(skill));
+        ArrayList<Skill> skills = dataAccess.getSkills();//Get a list of skill objects from the database
+        for (Skill skill : skills) {//for each skill from the database
+            SkillBox temp = new SkillBox(skill);//make a skill box
 
             skillsPane.add(temp);
         }
+        makeSkillActions();//Add actions to all the radioButtons inside the skillsPane
         rightPane.add(skillsPane);
 
     }
 
-    private void scoreAdded() {
+    private void fillSkills() {
         //Fill skill modifiers in
-        Component[] skills = skillsPane.getComponents();//Get a list of all skillBoxes from the skillsPane
-        for (Component skill : skills) {//For each listed skill
-            ((SkillBox) skill).setScoreBox(1);//Set the skill bonus equal to TODO get value of modifier from related ability score
+        Component[] components = skillsPane.getComponents();//Get a list of all skillBoxes from the skillsPane
+        for (Component component : components) {//For each item in the skills pane
+            if (component instanceof SkillBox box) {//If component is a skillBox
+                int bonus = 5;//TODO set this value to the corresponding ability score
+                box.setScore(bonus);
+            }
         }
     }
 
+    private void makeSkillActions() {
+        Component[] items = skillsPane.getComponents();//Gets all components inside the skillsPane
+        for (Component temp : items) {
+            if (temp instanceof SkillBox skill) {
+                skill.getProf().addActionListener(e -> fillSkills());
+            }
+        }
+    }
+
+    //getters and setters
     public Component[] getScoreBoxes() {//Returns all the components inside the scoresPane, should only be 6 scoreBoxes
         return scoresPane.getComponents();
     }

@@ -19,7 +19,7 @@ public class AbilityScoreBox extends JPanel {
         score = new JTextField();//Add textField for label
         score.setAlignmentX(0.5F);//Item aligns center
         score.setHorizontalAlignment(JTextField.CENTER);
-        score.addActionListener(e -> scoreEntered());//One of two action functions for when a score is entered. This one fills in the modifier for this box
+        score.addActionListener(e -> scoreEntered());//When a score is added the modifier is calculated and placed
         this.add(score);
 
         modifier = new JLabel("-");//Add Label for modifier

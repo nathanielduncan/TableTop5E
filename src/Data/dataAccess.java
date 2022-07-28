@@ -1,6 +1,7 @@
 package Data;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class dataAccess {
     //This class is the SQL level of the data access framework.
@@ -98,5 +99,25 @@ public class dataAccess {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<Skill> getSkills() {
+        try {
+            ArrayList<Skill> skills = new ArrayList<>();
+
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
+            Statement stmt = conn.createStatement();
+
+            ResultSet results =  stmt.executeQuery("SELECT * FROM skills");
+            while (results != null && results.next()) {
+                Skill temp = new Skill(results.getString("skill"), results.getString("ability")); //TODO return this stack of temps and make the skills box with it
+                skills.add(temp);
+            }
+            return skills;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
