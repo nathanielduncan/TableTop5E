@@ -30,7 +30,7 @@ public class StatPage extends JPanel {
         assert abilityScores != null : "No ability scores were found in the database, when making the scoresPane on the StatPage";
         for (AbilityScore score : abilityScores) {
             AbilityScoreBox temp = new AbilityScoreBox(score);
-            makeAbilityScoreAction(temp);
+            temp.getScore().addActionListener(e -> fillSkills(temp));
 
             scoresPane.add(temp);
             scoresPane.add(Box.createVerticalGlue());//Add glue between each box, so that extra space moves them away from each other
@@ -71,11 +71,6 @@ public class StatPage extends JPanel {
             skillsPane.add(temp);//Add it to the Pane
         }
         rightPane.add(skillsPane);
-    }
-
-    private void makeAbilityScoreAction(AbilityScoreBox abilityScoreBox) {//Brings in an ability score box
-        JTextField scoreField = abilityScoreBox.getScore();//Gets the JTextField from the scoreBox
-        scoreField.addActionListener(e -> fillSkills(abilityScoreBox));//Adds a listener to the textField, to fill in all the scores
     }
 
     private void fillSkills(AbilityScoreBox abilityScoreBox) {//is called when an ability score is entered
