@@ -1,5 +1,6 @@
 package CreateCharacter;
 
+import Data.AbilityScore;
 import Data.Skill;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class SkillBox extends JPanel {
     JRadioButton prof;
     JLabel title;
     Skill containedSkill;
+    AbilityScore containedAbility;
 
     public SkillBox(Skill skill) {
         containedSkill = skill;
@@ -36,6 +38,31 @@ public class SkillBox extends JPanel {
         this.add(Box.createHorizontalGlue());//Glue here on the right side makes sure all extra space is added to the end of the box
     }
 
+    public SkillBox(AbilityScore score) {
+        containedAbility = score;
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));//Items added from top to bottom
+
+        //Add radio button
+        prof = new JRadioButton();//Radio button marks if player is proficient in that skill
+        this.add(prof);//Add to box
+
+        this.add(Box.createRigidArea(new Dimension(5,0)));//Add a space
+
+        //Add Label for the skill bonus
+        scoreBox = new JLabel("--");
+        scoreBox.setBackground(Color.white);//Show background as white
+        scoreBox.setOpaque(true);//Makes the background viewable
+        this.add(scoreBox);//Ad to box
+
+        this.add(Box.createRigidArea(new Dimension(15,0)));//Add a space
+
+        //Add label for the skill name
+        this.title = new JLabel(score.getAbility());//Get the skill name and the corresponding
+        this.add(title);
+
+        this.add(Box.createHorizontalGlue());//Glue here on the right side makes sure all extra space is added to the end of the box
+    }
+
     public SkillBox(String name) {//This is for the proficiency bonus box, it does not have a radio button
         //Add Label for the skill bonus
         scoreBox = new JLabel("2");
@@ -53,5 +80,8 @@ public class SkillBox extends JPanel {
     }
 
     public Skill getContainedSkill() {return containedSkill;}
-    public void setScoreBox(String score) {this.scoreBox.setText(score);}
+    public AbilityScore getContainedAbility() {return  containedAbility;}
+    public void setScoreBoxText(String score) {this.scoreBox.setText(score);}
+    public JRadioButton getProf() {return prof;}
+    public JLabel getScoreBox() {return scoreBox;}
 }
