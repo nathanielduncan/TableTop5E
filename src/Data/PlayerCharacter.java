@@ -25,8 +25,13 @@ public class PlayerCharacter {
     }
 
     public boolean isCharFull() {
-        return !Stream.of(clas, race, background, strength, dexterity, constitution, intelligence, wisdom, charisma)
-                .allMatch(Objects::isNull);//If any member is null, this returns false
+        if (Stream.of(clas, race, background)//Checks if selection has been made
+                .anyMatch(Objects::isNull)) {return false;}
+        //Checks if scores have been changed from zero(initial value)
+        if (Stream.of(strength.getScore(), dexterity.getScore(), constitution.getScore(), intelligence.getScore(), wisdom.getScore(), charisma.getScore())
+                .anyMatch(n -> n == 0)) {return false;}
+
+        return true;//If everything has been selected, return true
     }
 
     //Getters and Setters

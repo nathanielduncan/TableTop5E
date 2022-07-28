@@ -97,7 +97,7 @@ public class CreateCharacterWindow extends JFrame {
             dataAccess.putNewCharacter(character);
         }
         else {
-            System.out.println("Not all 3 items have a selection.");//TODO: catch error better with a warning in the UI
+            System.out.println("Not all items have a selection.");//TODO: catch error better with a warning in the UI
         }
     }
 }

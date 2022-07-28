@@ -1,12 +1,13 @@
 package CreateCharacter;
 
-import Data.CharacterAttributes;
+import Data.AbilityScore;
 import Data.Skill;
 import Data.dataAccess;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+
 
 public class StatPage extends JPanel {
     JPanel scoresPane = new JPanel();//Panel on the left will hold ability scores and modifiers
@@ -24,10 +25,10 @@ public class StatPage extends JPanel {
     }
 
     private void makeScoresPane() {
-        for (CharacterAttributes.AbilityScores score : CharacterAttributes.AbilityScores.values()) {
-            AbilityScoreBox temp = new AbilityScoreBox(score.toString());
-
-            temp.score.addActionListener(e -> fillSkills());//When a score is entered, it fills all the corresponding skills
+        ArrayList<AbilityScore> abilityScores = dataAccess.getScores();
+        assert abilityScores != null : "No ability scores were found in the database, when making the scoresPane on the StatPage";
+        for (AbilityScore score : abilityScores) {
+            AbilityScoreBox temp = new AbilityScoreBox(score.getAbility());
 
             scoresPane.add(temp);
             scoresPane.add(Box.createVerticalGlue());//Add glue between each box, so that extra space moves them away from each other
@@ -46,8 +47,10 @@ public class StatPage extends JPanel {
         JPanel savingThrowsPane = new JPanel();
         savingThrowsPane.setLayout(new BoxLayout(savingThrowsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
         savingThrowsPane.setBorder(new ArcCornerBorder());
-        for (CharacterAttributes.AbilityScores score : CharacterAttributes.AbilityScores.values()) {
-            SkillBox temp = new SkillBox(String.valueOf(score));
+        ArrayList<AbilityScore> abilityScores = dataAccess.getScores();
+        assert abilityScores != null : "No ability scores were found in the database, when making the saving throws box on the StatPage";
+        for (AbilityScore score : abilityScores) {
+            SkillBox temp = new SkillBox(score.getAbility());
 
             savingThrowsPane.add(temp);
         }
@@ -60,34 +63,13 @@ public class StatPage extends JPanel {
         skillsPane.setLayout(new BoxLayout(skillsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
         skillsPane.setBorder(new ArcCornerBorder());
         ArrayList<Skill> skills = dataAccess.getSkills();//Get a list of skill objects from the database
+        assert skills != null : "No skills were found in the database while making the skillsBox on the StatPage";
         for (Skill skill : skills) {//for each skill from the database
             SkillBox temp = new SkillBox(skill);//make a skill box
 
             skillsPane.add(temp);
         }
-        makeSkillActions();//Add actions to all the radioButtons inside the skillsPane
         rightPane.add(skillsPane);
-
-    }
-
-    private void fillSkills() {
-        //Fill skill modifiers in
-        Component[] components = skillsPane.getComponents();//Get a list of all skillBoxes from the skillsPane
-        for (Component component : components) {//For each item in the skills pane
-            if (component instanceof SkillBox box) {//If component is a skillBox
-                int bonus = 5;//TODO set this value to the corresponding ability score
-                box.setScore(bonus);
-            }
-        }
-    }
-
-    private void makeSkillActions() {
-        Component[] items = skillsPane.getComponents();//Gets all components inside the skillsPane
-        for (Component temp : items) {
-            if (temp instanceof SkillBox skill) {
-                skill.getProf().addActionListener(e -> fillSkills());
-            }
-        }
     }
 
     //getters and setters

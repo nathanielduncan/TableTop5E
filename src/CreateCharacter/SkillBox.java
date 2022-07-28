@@ -50,12 +50,4 @@ public class SkillBox extends JPanel {
         this.add(Box.createHorizontalGlue());//Glue here on the right side makes sure all extra space is added to the end of the box
 
     }
-
-    //Getters and Setters
-    public JRadioButton getProf() {
-        return prof;
-    }
-    public void setScore(int score) {
-        this.scoreBox.setText(String.valueOf(score));
-    }
 }

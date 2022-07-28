@@ -101,6 +101,26 @@ public class dataAccess {
         }
     }
 
+    public static ArrayList<AbilityScore> getScores() {
+        try {
+            ArrayList<AbilityScore> scores = new ArrayList<>();
+
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/Data/ogl.db");
+            Statement stmt = conn.createStatement();
+
+            ResultSet results =  stmt.executeQuery("SELECT * FROM abilities");
+            while (results != null && results.next()) {
+                AbilityScore temp = new AbilityScore(results.getString("ability")); //TODO return this stack of temps and make the skills box with it
+                scores.add(temp);
+            }
+            return scores;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static ArrayList<Skill> getSkills() {
         try {
             ArrayList<Skill> skills = new ArrayList<>();
