@@ -1,6 +1,8 @@
 package CreateCharacter;
 
-import Data.*;
+import Data.PlayerCharacter;
+import Data.dataAccess;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Enumeration;
@@ -25,7 +27,6 @@ public class CreateCharacterWindow extends JFrame {
         contentPane.add(pagePane, BorderLayout.CENTER);//Add page Pane
         contentPane.add(buttonPane, BorderLayout.PAGE_END);//Add button pane
         makeRCBPageActions();//Make actions to store PC race, class, and background as they are chosen
-        makeStatPageActions();//Make actions to store ability scores as they are chosen
 
         //Make a Prev button to change panes back
         JButton prev = new JButton("Prev");
@@ -82,17 +83,20 @@ public class CreateCharacterWindow extends JFrame {
         }
     }
 
-    private void makeStatPageActions() {
+    private void checkStatBoxes() {//When a score is entered, it gets saved to the character
         Component[] skillBoxes = sp.getScoreBoxes();
         for (Component temp : skillBoxes) {
             if (temp instanceof AbilityScoreBox box) {//If item can't be cast as CreateCharacter.AbilityScoreBox (Glue and spacer items) it is skipped
                 JTextField score = box.getScore();//Get the score box
-                score.addActionListener(e -> character.setScoreByName(box.getTitle(), score.getText()));//Call this function when a score is entered, using the score from the box and the title of it from the label
+                character.setScoreByName(box.getTitle(), score.getText());//Call this function when a score is entered, using the score from the box and the title of it from the label
             }
         }
     }
 
     private void submitButtonClicked() {//Writes to the DB when creation is done
+        //Check all skill boxes to see if they are filled
+        checkStatBoxes();
+
         if (character.isCharFull()) {
             dataAccess.putNewCharacter(character);
         }

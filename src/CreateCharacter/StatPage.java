@@ -9,6 +9,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static CreateCharacter.DefineChangeListener.addChangeListener;
+
 
 public class StatPage extends JPanel {
     JPanel scoresPane = new JPanel();//Panel on the left will hold ability scores and modifiers
@@ -32,7 +34,7 @@ public class StatPage extends JPanel {
         assert abilityScores != null : "No ability scores were found in the database, when making the scoresPane on the StatPage";
         for (AbilityScore score : abilityScores) {
             AbilityScoreBox temp = new AbilityScoreBox(score);
-            temp.getScore().addActionListener(e -> fillSkills(temp));
+            addChangeListener(temp.getScore(), e -> fillSkills(temp));//Custom listener, when the score box is added to, removed from, or changed the skills respond
 
             scoresPane.add(temp);
             scoresPane.add(Box.createVerticalGlue());//Add glue between each box, so that extra space moves them away from each other

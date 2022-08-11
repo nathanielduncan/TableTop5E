@@ -28,10 +28,8 @@ public class PlayerCharacter {
         if (Stream.of(clas, race, background)//Checks if selection has been made
                 .anyMatch(Objects::isNull)) {return false;}
         //Checks if scores have been changed from zero(initial value)
-        if (Stream.of(strength.getScore(), dexterity.getScore(), constitution.getScore(), intelligence.getScore(), wisdom.getScore(), charisma.getScore())
-                .anyMatch(n -> n == 0)) {return false;}
-
-        return true;//If everything has been selected, return true
+        return Stream.of(strength.getScore(), dexterity.getScore(), constitution.getScore(), intelligence.getScore(), wisdom.getScore(), charisma.getScore())
+                .noneMatch(n -> n == 0);//If everything has been selected, return true
     }
 
     //Getters and Setters
@@ -44,15 +42,16 @@ public class PlayerCharacter {
     }
 
     public void setScoreByName(String name, String score) {
-        System.out.println("Setting " + name + " as " + score);
-        switch (name) {
-            case "Strength" -> setStrength(Integer.parseInt(score));
-            case "Dexterity" -> setDexterity(Integer.parseInt(score));
-            case "Constitution" -> setConstitution(Integer.parseInt(score));
-            case "Intelligence" -> setIntelligence(Integer.parseInt(score));
-            case "Wisdom" -> setWisdom(Integer.parseInt(score));
-            case "Charisma" -> setCharisma(Integer.parseInt(score));
-            default -> System.out.println("No setter function called");
+        if (!Objects.equals(score, "")) {//If score is not empty
+            switch (name) {
+                case "Strength" -> setStrength(Integer.parseInt(score));
+                case "Dexterity" -> setDexterity(Integer.parseInt(score));
+                case "Constitution" -> setConstitution(Integer.parseInt(score));
+                case "Intelligence" -> setIntelligence(Integer.parseInt(score));
+                case "Wisdom" -> setWisdom(Integer.parseInt(score));
+                case "Charisma" -> setCharisma(Integer.parseInt(score));
+                default -> System.out.println("No setter function called");
+            }
         }
     }
 
