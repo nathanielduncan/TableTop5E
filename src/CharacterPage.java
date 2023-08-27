@@ -20,5 +20,10 @@ public class CharacterPage extends JPanel {
 
         CCPage.pack();//Sets the window size to fit all components
         CCPage.setVisible(true);//Makes it visible
+
+        //Create an object that has information about the users device
+        Toolkit tk=Toolkit.getDefaultToolkit(); //Initializing the Toolkit class.
+        Dimension screenSize = tk.getScreenSize(); //Get the Screen resolution of the device
+        CCPage.setSize(screenSize.width / 2, (int) (screenSize.height * 0.95)); //Window will take up half the screen
     }
 }

@@ -5,6 +5,7 @@ import Data.Skill;
 import Data.dataAccess;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -14,19 +15,25 @@ import static CreateCharacter.DefineChangeListener.addChangeListener;
 
 public class StatPage extends JPanel {
     JPanel scoresPane = new JPanel();//Panel on the left will hold ability scores and modifiers
-    JPanel rightPane = new JPanel();//Holds proficiency bonus,saving throws, and skills
+    JPanel rightPane = new JPanel();//Holds proficiency bonus, saving throws, and skills
     SkillBox profBonusBox;
     JPanel savingThrowsPane;
     JPanel skillsPane;
 
     public StatPage() {
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));//Set the layout manager for the statPage. Two panes will be added in line horizontally.
+
         scoresPane.setLayout(new BoxLayout(scoresPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
+        scoresPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));//Creates spacer border around the pane
         makeScoresPane();
         this.add(scoresPane);
 
         rightPane.setLayout(new BoxLayout(rightPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
-        makeRightPane();//Puts other panels inside this one for three things listed above ^
+        rightPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));//Creates spacer border around the pane
+        makeRightPane();//Puts other panels inside this one for proficiency bonus, saving throws, and skills
         this.add(rightPane);
+
+        this.add(Box.createHorizontalGlue());//Add glue between the left pane and the right pane
     }
 
     private void makeScoresPane() {
@@ -37,22 +44,24 @@ public class StatPage extends JPanel {
             addChangeListener(temp.getScore(), e -> fillSkills(temp));//Custom listener, when the score box is added to, removed from, or changed the skills respond
 
             scoresPane.add(temp);
-            scoresPane.add(Box.createVerticalGlue());//Add glue between each box, so that extra space moves them away from each other
         }
+        scoresPane.add(Box.createVerticalGlue());
     }
 
     private void makeRightPane() {//Makes panes for proficiency bonus,saving throws, and skills
+        //Two borders defined to be used for each of the three panes
+        ArcCornerBorder border1 = new ArcCornerBorder();//Instance of custom Border
+        Border border2 = BorderFactory.createEmptyBorder(10, 10, 10, 10);//Instance of empty Border
+
         //Proficiency bonus box
         profBonusBox = new SkillBox("Proficiency Bonus");//Won't make a radio button
-        profBonusBox.setBorder(new ArcCornerBorder());
+        profBonusBox.setBorder(BorderFactory.createCompoundBorder(border2, border1));//Assign the combined 2 borders to the score box
         rightPane.add((profBonusBox));
-
-        rightPane.add(Box.createRigidArea(new Dimension(0,20)));//Add a space
 
         //Saving throws box
         savingThrowsPane = new JPanel();
         savingThrowsPane.setLayout(new BoxLayout(savingThrowsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
-        savingThrowsPane.setBorder(new ArcCornerBorder());
+        savingThrowsPane.setBorder(BorderFactory.createCompoundBorder(border2, border1));//Assign the combined 2 borders to the score box
         ArrayList<AbilityScore> abilityScores = dataAccess.getScores();
         assert abilityScores != null : "No ability scores were found in the database, when making the saving throws box on the StatPage";
         for (AbilityScore score : abilityScores) {
@@ -63,12 +72,10 @@ public class StatPage extends JPanel {
         }
         rightPane.add(savingThrowsPane);
 
-        rightPane.add(Box.createRigidArea(new Dimension(0,20)));//Add a space
-
         //Skills box
         skillsPane = new JPanel();//Defined outside function so it can be used elsewhere
         skillsPane.setLayout(new BoxLayout(skillsPane, BoxLayout.Y_AXIS));//Buttons and labels panels added vertically
-        skillsPane.setBorder(new ArcCornerBorder());
+        skillsPane.setBorder(BorderFactory.createCompoundBorder(border2, border1));//Assign the combined 2 borders to the score box
         ArrayList<Skill> skills = dataAccess.getSkills();//Get a list of skill objects from the database
         assert skills != null : "No skills were found in the database while making the skillsBox on the StatPage";
         for (Skill skill : skills) {//for each skill from the database
@@ -78,6 +85,7 @@ public class StatPage extends JPanel {
             skillsPane.add(temp);//Add it to the Pane
         }
         rightPane.add(skillsPane);
+        rightPane.add(Box.createVerticalGlue());
     }
 
     private void fillSkills(AbilityScoreBox abilityScoreBox) {//is called when an ability score is entered
@@ -123,18 +131,21 @@ public class StatPage extends JPanel {
         }
     }
 
-    private void makeSkillProfAction(SkillBox skillBox) {
-        if (skillBox.getProf().isSelected()) {
-            int score = Integer.parseInt(skillBox.getScoreBox().getText());
-            score += Integer.parseInt(profBonusBox.getScoreBox().getText());
+    private void makeSkillProfAction(SkillBox skillBox) {//Called when radio button for skill or saving throw is en/disabled
+        try {//Button only works if ability score is entered first
+            int score = Integer.parseInt(skillBox.getScoreBox().getText());//Get the relating modifier
 
-            skillBox.setScoreBoxText(String.valueOf(score));
-        } else {//if radioButton is disabled
-            int score = Integer.parseInt(skillBox.getScoreBox().getText());
-            score -= Integer.parseInt(profBonusBox.getScoreBox().getText());
+            //Add or subtract the prof bonus depending on the state of the button
+            if (skillBox.getProf().isSelected()) {//If button is enabled
+                score += Integer.parseInt(profBonusBox.getScoreBox().getText());//Add the prof bonus to the skill/save
+            } else {//if radioButton is disabled
+                score -= Integer.parseInt(profBonusBox.getScoreBox().getText());//Add the prof bonus to the skill/save
+            }
+            skillBox.setScoreBoxText(String.valueOf(score));//Set skill/save score
 
-            skillBox.setScoreBoxText(String.valueOf(score));
-
+        } catch (NumberFormatException e){//If score is not entered, nothing happens
+            System.out.println("Ability Score needs to be entered first."); //TODO: make a UI error for this
+            skillBox.getProf().setSelected(false);//Unselects the button
         }
     }
 

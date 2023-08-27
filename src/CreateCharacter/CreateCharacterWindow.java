@@ -4,6 +4,7 @@ import Data.PlayerCharacter;
 import Data.dataAccess;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.util.Enumeration;
 
@@ -26,6 +27,10 @@ public class CreateCharacterWindow extends JFrame {
 
         contentPane.add(pagePane, BorderLayout.CENTER);//Add page Pane
         contentPane.add(buttonPane, BorderLayout.PAGE_END);//Add button pane
+
+        pagePane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+        pagePane.setLayout(new BoxLayout(pagePane, BoxLayout.X_AXIS));
+        contentPane.add(pagePane);
         makeRCBPageActions();//Make actions to store PC race, class, and background as they are chosen
 
         //Make a Prev button to change panes back
@@ -41,29 +46,32 @@ public class CreateCharacterWindow extends JFrame {
         submit.addActionListener(e -> submitButtonClicked());
         buttonPane.add(submit);
 
-        showPage1();//Start at page one
+        pagePane.add(rcb);
+        pagePane.add(sp);
+
+        showPage1();
     }
 
     public void showPage1() {
-        pagePane.removeAll();
-        pagePane.add(rcb);
-        pagePane.revalidate();
-        pagePane.repaint();//Show new page
-        pack();//resize window to fit
+        Component[] pages = pagePane.getComponents();
+        for (Component page : pages) {
+                page.setVisible(false);//Hides all pages from view
+        }
+        rcb.setVisible(true);//Make the page we want visible
 
-        buttonPane.getComponent(0).setEnabled(false);
-        buttonPane.getComponent(1).setEnabled(true);
+        buttonPane.getComponent(0).setEnabled(false);//Prev button turns off
+        buttonPane.getComponent(1).setEnabled(true);//Next button turns on
     }
 
     public void showPage2() {
-        pagePane.removeAll();
-        pagePane.add(sp);
-        pagePane.revalidate();
-        pagePane.repaint();//Show new page
-        pack();//resize window to fit
+        Component[] pages = pagePane.getComponents();//Get all the pages
+        for (Component page : pages) {//For each page
+            page.setVisible(false);//Hide the page from view
+        }
+        sp.setVisible(true);//Make the page we want visible
 
-        buttonPane.getComponent(1).setEnabled(false);
-        buttonPane.getComponent(0).setEnabled(true);
+        buttonPane.getComponent(0).setEnabled(true);//Prev button turns on
+        buttonPane.getComponent(1).setEnabled(false);//Next button turns off
     }
 
     private void makeRCBPageActions() {

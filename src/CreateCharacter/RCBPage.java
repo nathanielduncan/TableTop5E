@@ -168,9 +168,6 @@ public class RCBPage extends JPanel {
                     colNames.get(colCount) + ": " + raceDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
             colCount++;
         }
-
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(tabPane);
-        frame.pack();
     }
 
     private void classButtonClicked(PCClassDesc classDesc, ArrayList<String> colNames) {
@@ -183,9 +180,6 @@ public class RCBPage extends JPanel {
                     colNames.get(colCount) + ": " + classDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
             colCount++;
         }
-
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(tabPane);
-        frame.pack();
     }
 
     private void backGButtonClicked(PCBackGDesc backGDesc, ArrayList<String> colNames) {
@@ -198,9 +192,6 @@ public class RCBPage extends JPanel {
                     colNames.get(colCount) + ": " + backGDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
             colCount++;
         }
-
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(tabPane);
-        frame.pack();
     }
 
     private void makeClassLabels(ArrayList<String> columns) {
