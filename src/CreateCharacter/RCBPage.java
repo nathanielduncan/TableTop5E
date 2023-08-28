@@ -18,21 +18,22 @@ public class RCBPage extends JPanel {
     private JPanel panelRaceButtons;
     private ButtonGroup buttonGroupRace;
     private JPanel panelRaceLabels;
-    private final ArrayList<JLabel> raceLabels = new ArrayList<>();
+    private final ArrayList<DescriptionBox> raceLabels = new ArrayList<>();
 
     //Class page
     private JPanel panelClass;
     private JPanel panelClassButtons;
     private ButtonGroup buttonGroupClass;
     private JPanel panelClassLabels;
-    private final ArrayList<JLabel> classLabels = new ArrayList<>();
+    private final ArrayList<DescriptionBox> classLabels = new ArrayList<>();
+
 
     //Background page
     private JPanel panelBackG;
     private JPanel panelBackGButtons;
     private ButtonGroup buttonGroupBackG;
     private JPanel panelBackGLabels;
-    private final ArrayList<JLabel> backGLabels = new ArrayList<>();
+    private final ArrayList<DescriptionBox> backGLabels = new ArrayList<>();
 
     public RCBPage() {
         this.add(tabPane);//Adds TabbedPane to content panel
@@ -116,7 +117,7 @@ public class RCBPage extends JPanel {
             button.addActionListener(e -> raceButtonClicked(PCRace, colNames));
 
             //Add a space after each button, so they are evenly spaced and do not move
-            panelRaceButtons.add(Box.createRigidArea(new Dimension(0,50)));
+            panelRaceButtons.add(Box.createVerticalGlue());
         }
     }
 
@@ -135,7 +136,7 @@ public class RCBPage extends JPanel {
             button.addActionListener(e -> classButtonClicked(PCClass, colNames));
 
             //Add a space after each button, so they are evenly spaced and do not move
-            panelClassButtons.add(Box.createRigidArea(new Dimension(0,50)));
+            panelClassButtons.add(Box.createVerticalGlue());
 
         }
     }
@@ -155,7 +156,7 @@ public class RCBPage extends JPanel {
             button.addActionListener(e -> backGButtonClicked(PCBackG, colNames));
 
             //Add a space after each button, so they are evenly spaced and do not move
-            panelClassButtons.add(Box.createRigidArea(new Dimension(0,50)));
+            panelClassButtons.add(Box.createVerticalGlue());
         }
     }
     private void raceButtonClicked(PCRaceDesc raceDesc, ArrayList<String> colNames) {//When creating action
@@ -163,9 +164,9 @@ public class RCBPage extends JPanel {
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
         int colCount = 0;//Keeps track of what column we are on
 
-        for (JLabel label: raceLabels) {//for each label that exist on this page
-            label.setText((String.format(format, width,
-                    colNames.get(colCount) + ": " + raceDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
+        for (DescriptionBox option: raceLabels) {//for each label that exist on this page
+            option.putDescription(String.format(format, width,
+                    raceDesc.getFrom(colNames.get(colCount))));
             colCount++;
         }
     }
@@ -175,9 +176,9 @@ public class RCBPage extends JPanel {
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
         int colCount = 0;//Keeps track of what column we are on
 
-        for (JLabel label: classLabels) {//for each label that exist on this page
-            label.setText((String.format(format, width,
-                    colNames.get(colCount) + ": " + classDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
+        for (DescriptionBox option : classLabels) {
+            option.putDescription(String.format(format, width,
+                    classDesc.getFrom(colNames.get(colCount))));
             colCount++;
         }
     }
@@ -187,9 +188,9 @@ public class RCBPage extends JPanel {
         String format = "<html><div style=\"width:%dpx;\">%s</div></html>";//HTML that sets the style of the label text
         int colCount = 0;//Keeps track of what column we are on
 
-        for (JLabel label: backGLabels) {//for each label that exist on this page
-            label.setText((String.format(format, width,
-                    colNames.get(colCount) + ": " + backGDesc.getFrom(colNames.get(colCount)))));//Set the text format, and fill with information
+        for (DescriptionBox option : backGLabels) {
+            option.putDescription(String.format(format, width,
+                    backGDesc.getFrom(colNames.get(colCount))));
             colCount++;
         }
     }
@@ -197,30 +198,33 @@ public class RCBPage extends JPanel {
     private void makeClassLabels(ArrayList<String> columns) {
         //Defines all labels for the class page, and puts them in an array for use later
         for (String column: columns) {//For each category that needs a label
-            JLabel tempLabel = new JLabel("" + column);//Make a new label
-            classLabels.add(tempLabel);//Add it to the labelArray
-            panelClassLabels.add(tempLabel);//Add it to the panel
-            panelClassLabels.add(Box.createRigidArea(new Dimension(0,35)));//Add a space to keep them from touching
+            DescriptionBox tempPane = new DescriptionBox(column);//Creates custom Pane, fills the title
+            classLabels.add(tempPane);//Add it to the label Array
+            panelClassLabels.add(tempPane);//Add it to the panel
+
+            panelClassLabels.add(Box.createVerticalGlue());
         }
     }
 
     private void makeRaceLabels(ArrayList<String> columns) {
         //Defines all labels for the race page, and puts them in an array for use later
         for (String column : columns) {//For each category that needs a label
-            JLabel tempLabel = new JLabel("" + column);//Make a new label
+            DescriptionBox tempLabel = new DescriptionBox(column);//Make a new label
             raceLabels.add(tempLabel);//Add it to the label Array
             panelRaceLabels.add(tempLabel);//Add it to the panel
-            panelRaceLabels.add(Box.createRigidArea(new Dimension(0,35)));//Add a space to keep them from touching
+
+            panelRaceLabels.add(Box.createVerticalGlue());
         }
     }
 
     private void makeBackGLabels(ArrayList<String> columns) {
         //Defines all labels for the backgrounds page, and puts them in an array for use later
         for (String column : columns) {//For each category that needs a label
-            JLabel tempLabel = new JLabel("" + column);//Make a new label
+            DescriptionBox tempLabel = new DescriptionBox(column);//Make a new label
             backGLabels.add(tempLabel);//Add it to the label Array
             panelBackGLabels.add(tempLabel);//Add it to the panel
-            panelBackGLabels.add(Box.createRigidArea(new Dimension(0,35)));//Add a space to keep them from touching
+
+            panelBackGLabels.add(Box.createVerticalGlue());
         }
     }
 
